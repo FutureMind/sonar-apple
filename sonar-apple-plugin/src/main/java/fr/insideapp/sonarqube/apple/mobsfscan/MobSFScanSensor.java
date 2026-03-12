@@ -31,11 +31,21 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.config.Configuration;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class MobSFScanSensor implements Sensor {
+
+    private static final Logger LOGGER = Loggers.get(MobSFScanSensor.class);
 
     private final Swift swift;
     private final ObjectiveC objectiveC;
@@ -71,12 +81,42 @@ public class MobSFScanSensor implements Sensor {
 
     @Override
     public void execute(SensorContext sensorContext) {
-        String output = runner.run();
-        List<MobSFScanIssue> issues = parser.parse(output);
+        Configuration config = sensorContext.config();
+        Optional<String> reportPaths = config.get(MobSFScanExtensionProvider.REPORT_PATHS_KEY);
+
+        final List<MobSFScanIssue> issues;
+        if (reportPaths.isPresent()) {
+            issues = readReportFiles(reportPaths.get(), sensorContext);
+        } else {
+            String output = runner.run();
+            issues = parser.parse(output);
+        }
+
         List<ReportIssue> reportIssues = mapper.map(issues).stream().toList();
         Map<MobSFScanRulesDefinition, List<ReportIssue>> splitReportIssues = splitter.split(reportIssues, sensorContext.activeRules());
         ReportIssueRecorder issueRecorder = new ReportIssueRecorder();
         splitReportIssues.forEach((rulesDefinition, splitIssues) -> issueRecorder.recordIssues(splitIssues, rulesDefinition.getRepositoryKey(), sensorContext));
+    }
+
+    private List<MobSFScanIssue> readReportFiles(String paths, SensorContext sensorContext) {
+        List<MobSFScanIssue> allIssues = new ArrayList<>();
+        Path baseDir = sensorContext.fileSystem().baseDir().toPath();
+        for (String path : paths.split(",")) {
+            Path resolved = baseDir.resolve(path.trim());
+            if (Files.exists(resolved)) {
+                try {
+                    String content = Files.readString(resolved);
+                    allIssues.addAll(parser.parse(content));
+                    LOGGER.info("Read MobSFScan report: {}", resolved);
+                } catch (IOException e) {
+                    LOGGER.error("Failed to read MobSFScan report: {}", resolved);
+                    LOGGER.debug("{}", e);
+                }
+            } else {
+                LOGGER.warn("MobSFScan report not found: {}", resolved);
+            }
+        }
+        return allIssues;
     }
 
 }

@@ -21,6 +21,8 @@ import fr.insideapp.sonarqube.apple.commons.ExtensionProvider;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.mapper.SwiftLintReportMapper;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.parser.SwiftLintReportParser;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.runner.SwiftLintRunner;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -29,8 +31,22 @@ import java.util.List;
 @ScannerSide
 public final class SwiftLintExtensionProvider implements ExtensionProvider {
 
+    public static final String REPORT_PATHS_KEY = "sonar.apple.swiftLint.reportPaths";
+
+    private static final String SUBCATEGORY = "SwiftLint";
+
+    private static final PropertyDefinition REPORT_PATHS_PROPERTY = PropertyDefinition
+            .builder(REPORT_PATHS_KEY)
+            .name("SwiftLint report paths")
+            .description("Comma-separated paths to pre-generated SwiftLint JSON reports. When set, the sensor imports these instead of running the swiftlint binary.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .category(APPLE_CATEGORY)
+            .subCategory(SUBCATEGORY)
+            .build();
+
     public List<Object> extensions() {
         return Arrays.asList(
+                REPORT_PATHS_PROPERTY,
                 SwiftLintRulesDefinition.class,
                 SwiftLintRunner.class,
                 SwiftLintReportParser.class,
@@ -38,6 +54,5 @@ public final class SwiftLintExtensionProvider implements ExtensionProvider {
                 SwiftLintSensor.class
         );
     }
-
 
 }

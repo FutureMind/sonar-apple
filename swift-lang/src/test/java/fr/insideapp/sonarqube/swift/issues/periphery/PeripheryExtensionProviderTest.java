@@ -41,7 +41,7 @@ public final class PeripheryExtensionProviderTest {
 
     @Test
     public void extensions() {
-        assertThat(provider.extensions()).hasSize(8);
+        assertThat(provider.extensions()).hasSize(10);
     }
 
     @Test

@@ -29,12 +29,17 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class PeripherySensor implements Sensor {
 
@@ -75,15 +80,44 @@ public class PeripherySensor implements Sensor {
             LOGGER.info("Skipping Periphery analysis ({}=true).", PeripheryExtensionProvider.SKIP_KEY);
             return;
         }
-        String output = runner.run();
-        List<PeripheryIssue> issues = parser
-                .parse(output)
-                .stream()
-                .filter(issue -> Objects.nonNull(issue.location)) // remove null values
+        Configuration config = sensorContext.config();
+        Optional<String> reportPaths = config.get(PeripheryExtensionProvider.REPORT_PATHS_KEY);
+
+        List<String> outputs;
+        if (reportPaths.isPresent()) {
+            outputs = readReportFiles(reportPaths.get(), sensorContext);
+        } else {
+            outputs = List.of(runner.run());
+        }
+
+        List<PeripheryIssue> issues = outputs.stream()
+                .map(parser::parse)
+                .flatMap(List::stream)
+                .filter(issue -> Objects.nonNull(issue.location))
                 .toList();
         List<ReportIssue> reportIssues = new ArrayList<>(mapper.map(issues));
         ReportIssueRecorder issueRecorder = new ReportIssueRecorder();
         issueRecorder.recordIssues(reportIssues, rulesDefinition.getRepositoryKey(), sensorContext);
+    }
+
+    private List<String> readReportFiles(String paths, SensorContext sensorContext) {
+        List<String> outputs = new ArrayList<>();
+        Path baseDir = sensorContext.fileSystem().baseDir().toPath();
+        for (String path : paths.split(",")) {
+            Path resolved = baseDir.resolve(path.trim());
+            if (Files.exists(resolved)) {
+                try {
+                    outputs.add(Files.readString(resolved));
+                    LOGGER.info("Read Periphery report: {}", resolved);
+                } catch (IOException e) {
+                    LOGGER.error("Failed to read Periphery report: {}", resolved);
+                    LOGGER.debug("{}", e);
+                }
+            } else {
+                LOGGER.warn("Periphery report not found: {}", resolved);
+            }
+        }
+        return outputs;
     }
 
 }

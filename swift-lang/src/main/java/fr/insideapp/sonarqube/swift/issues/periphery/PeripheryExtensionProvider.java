@@ -77,12 +77,24 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
             .subCategory(CATEGORY)
             .build();
 
+    public static final String REPORT_PATHS_KEY = "sonar.apple.periphery.reportPaths";
+
+    private static final PropertyDefinition REPORT_PATHS_PROPERTY = PropertyDefinition
+            .builder(REPORT_PATHS_KEY)
+            .name("Periphery report paths")
+            .description("Comma-separated paths to pre-generated Periphery JSON reports. When set, the sensor imports these instead of running the periphery binary.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .category(APPLE_CATEGORY)
+            .subCategory(CATEGORY)
+            .build();
+
     public List<Object> extensions() {
         return Arrays.asList(
                 INDEX_STORE_PATH_PROPERTY,
                 SKIP_PROPERTY,
                 PROJECT_PATH_PROPERTY,
                 SCHEMES_PROPERTY,
+                REPORT_PATHS_PROPERTY,
                 PeripheryRulesDefinition.class,
                 PeripheryRunner.class,
                 PeripheryReportParser.class,

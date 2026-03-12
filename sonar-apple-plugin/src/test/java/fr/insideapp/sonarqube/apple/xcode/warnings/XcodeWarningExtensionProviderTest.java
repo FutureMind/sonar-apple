@@ -33,7 +33,7 @@ public final class XcodeWarningExtensionProviderTest {
 
     @Test
     public void extensions() {
-        assertThat(provider.extensions()).hasSize(7);
+        assertThat(provider.extensions()).hasSize(8);
     }
 
 }

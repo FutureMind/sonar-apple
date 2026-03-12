@@ -41,8 +41,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class XcodeCoverageSensorTest {
 
@@ -157,6 +156,49 @@ public class XcodeCoverageSensorTest {
                 "failure",
                 List.of()
         ));
+    }
+
+    @Test
+    public void executeWithReportPaths() {
+        // Set up report paths property pointing to existing success.json
+        File reportFile = new File(baseDir, "success.json");
+        String relativePath = baseDir.toPath().relativize(reportFile.toPath()).toString();
+        context.setSettings(context.settings().setProperty(
+                XcodeCoverageExtensionProvider.REPORT_PATHS_KEY, relativePath));
+
+        // Add input file expected by coverage data
+        DefaultInputFile inputFile = new TestInputFileBuilder("", "file.swift")
+                .setLines(Integer.MAX_VALUE)
+                .build();
+        context.fileSystem().add(inputFile);
+
+        // Execute
+        sensor.execute(context);
+
+        // Runner should never be called when reportPaths is set
+        verify(runner, never()).run(any());
+
+        // Verify coverage was recorded (same assertions as executeSuccess)
+        assertThat(context.lineHits(":file.swift", 1)).isNull();
+        assertThat(context.lineHits(":file.swift", 2)).isEqualTo(0);
+        assertThat(context.lineHits(":file.swift", 3)).isEqualTo(1);
+        assertThat(context.lineHits(":file.swift", 4)).isEqualTo(Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void executeWithReportPaths_fileNotFound() {
+        // Set up report paths property pointing to non-existent file
+        context.setSettings(context.settings().setProperty(
+                XcodeCoverageExtensionProvider.REPORT_PATHS_KEY, "nonexistent-report.json"));
+
+        // Execute — should not crash
+        sensor.execute(context);
+
+        // Runner should never be called when reportPaths is set
+        verify(runner, never()).run(any());
+
+        // No coverage data should be recorded
+        assertThat(context.lineHits(":file.swift", 1)).isNull();
     }
 
     private void assertContainer(Container container) throws IOException {

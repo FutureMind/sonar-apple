@@ -42,7 +42,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 public class SwiftLintSensorTest {
@@ -75,6 +75,8 @@ public class SwiftLintSensorTest {
                 parser,
                 mapper
         );
+        // Default: no report paths property set (runner path)
+        context.setSettings(context.settings());
     }
 
     @Test
@@ -133,6 +135,76 @@ public class SwiftLintSensorTest {
         assertThat(issue1.primaryLocation().message()).isEqualTo("Lines should not have trailing whitespace");
         assertThat(issue1.primaryLocation().inputComponent().key()).isEqualTo(":Greeting.swift");
         assertThat(issue1.primaryLocation().textRange().start().line()).isEqualTo(5);
+    }
+
+    @Test
+    public void execute_withReportPaths_readsFiles() {
+        // prepare — point at the oneIssue.json test fixture
+        context.settings().setProperty(
+                SwiftLintExtensionProvider.REPORT_PATHS_KEY,
+                "oneIssue.json"
+        );
+        DefaultInputFile testFile = new TestInputFileBuilder("", "Greeting.swift")
+                .setModuleBaseDir(Paths.get(BASE_DIR))
+                .setLanguage(swift.getKey())
+                .setLines(10)
+                .setOriginalLineEndOffsets(new int[10])
+                .setOriginalLineStartOffsets(new int[10])
+                .build();
+        context.fileSystem().add(testFile);
+
+        when(parser.parse(anyString())).thenReturn(List.of());
+        ReportIssue reportIssue = new ReportIssue(
+                "trailing_whitespace",
+                "Lines should not have trailing whitespace",
+                testFile.path().toString(),
+                5
+        );
+        when(mapper.map(any())).thenReturn(Set.of(reportIssue));
+        when(rulesDefinition.getRepositoryKey()).thenReturn("key");
+
+        // test
+        sensor.execute(context);
+
+        // assert — runner should NOT be called
+        verify(runner, never()).run();
+        List<Issue> issues = new ArrayList<>(context.allIssues());
+        assertThat(issues).hasSize(1);
+        assertThat(issues.get(0).ruleKey().rule()).isEqualTo("trailing_whitespace");
+    }
+
+    @Test
+    public void execute_withReportPaths_fileNotFound() {
+        // prepare — point at a non-existent file
+        context.settings().setProperty(
+                SwiftLintExtensionProvider.REPORT_PATHS_KEY,
+                "does-not-exist.json"
+        );
+        when(mapper.map(any())).thenReturn(Set.of());
+        when(rulesDefinition.getRepositoryKey()).thenReturn("key");
+
+        // test — should not crash
+        sensor.execute(context);
+
+        // assert
+        verify(runner, never()).run();
+        assertThat(context.allIssues()).isEmpty();
+    }
+
+    @Test
+    public void execute_withoutReportPaths_runsSwiftlint() {
+        // prepare — no property set, falls back to runner
+        when(runner.run()).thenReturn(List.of());
+        when(parser.parse(anyString())).thenReturn(List.of());
+        when(mapper.map(any())).thenReturn(Set.of());
+        when(rulesDefinition.getRepositoryKey()).thenReturn("key");
+
+        // test
+        sensor.execute(context);
+
+        // assert — runner SHOULD be called
+        verify(runner).run();
+        assertThat(context.allIssues()).isEmpty();
     }
 
 }

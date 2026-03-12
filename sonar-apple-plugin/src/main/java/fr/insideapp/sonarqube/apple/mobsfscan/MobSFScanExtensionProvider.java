@@ -24,6 +24,8 @@ import fr.insideapp.sonarqube.apple.mobsfscan.runner.MobSFScanRunner;
 import fr.insideapp.sonarqube.apple.mobsfscan.splitter.MobSFScanReportIssueSplitter;
 import fr.insideapp.sonarqube.objc.issues.mobsfscan.MobSFScanObjectiveCRulesDefinition;
 import fr.insideapp.sonarqube.swift.issues.mobsfscan.MobSFScanSwiftRulesDefinition;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -32,8 +34,22 @@ import java.util.List;
 @ScannerSide
 public final class MobSFScanExtensionProvider implements ExtensionProvider {
 
+    private static final String CATEGORY = "MobSFScan";
+
+    public static final String REPORT_PATHS_KEY = "sonar.apple.mobsfscan.reportPaths";
+
+    private static final PropertyDefinition REPORT_PATHS_PROPERTY = PropertyDefinition
+            .builder(REPORT_PATHS_KEY)
+            .name("MobSFScan report paths")
+            .description("Comma-separated paths to pre-generated MobSFScan JSON reports. When set, the sensor imports these instead of running mobsfscan.")
+            .onQualifiers(Qualifiers.PROJECT)
+            .category(APPLE_CATEGORY)
+            .subCategory(CATEGORY)
+            .build();
+
     public List<Object> extensions() {
         return Arrays.asList(
+                REPORT_PATHS_PROPERTY,
                 MobSFScanSwiftRulesDefinition.class,
                 MobSFScanObjectiveCRulesDefinition.class,
                 MobSFScanRunner.class,
