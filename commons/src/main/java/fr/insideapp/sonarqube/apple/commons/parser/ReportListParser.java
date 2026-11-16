@@ -34,11 +34,16 @@ public abstract class ReportListParser<T> implements ReportParsable<List<T>> {
 
     public List<T> parse(String input) {
         List<T> objects = new ArrayList<>();
+        if (input == null || input.isBlank()) {
+            // the tool failed or produced nothing; the runner already logged why
+            LOGGER.debug("No {} output to parse", objectName());
+            return objects;
+        }
         try {
             objects.addAll(perform(input));
         } catch (Exception e) {
-            LOGGER.error("Parsing failed. Run in verbose to get more information.");
-            LOGGER.debug("{}", e);
+            LOGGER.error("Could not parse the {} output: {}", objectName(), e.getMessage());
+            LOGGER.debug("{} parsing failure", objectName(), e);
         }
         LOGGER.info("Parsed {} {}", objects.size(), objectName());
         return objects;

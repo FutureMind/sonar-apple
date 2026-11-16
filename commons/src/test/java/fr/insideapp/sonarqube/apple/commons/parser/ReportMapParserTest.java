@@ -27,6 +27,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public final class ReportMapParserTest {
@@ -43,9 +45,18 @@ public final class ReportMapParserTest {
         // prepare
         when(parser.perform(anyString())).thenThrow(ExceptionHelper.build());
         // test
-        Map<?, ?> outputs = parser.parse(anyString());
+        Map<?, ?> outputs = parser.parse("{\"report\": true}");
         // assert
         assertThat(outputs).isEmpty();
+    }
+
+    @Test
+    public void parse_blank_input() throws Exception {
+        // test: a failed tool run yields empty output, which must not be parsed
+        Map<?, ?> outputs = parser.parse("  ");
+        // assert
+        assertThat(outputs).isEmpty();
+        verify(parser, never()).perform(anyString());
     }
 
     @Test
@@ -53,7 +64,7 @@ public final class ReportMapParserTest {
         // prepare
         when(parser.perform(anyString())).thenReturn(Map.of("key_parsed", "value_parsed"));
         // test
-        Map<?, ?> outputs = parser.parse(anyString());
+        Map<?, ?> outputs = parser.parse("{\"report\": true}");
         // assert
         assertThat(outputs).hasSize(1).isEqualTo(Map.of("key_parsed", "value_parsed"));
     }
