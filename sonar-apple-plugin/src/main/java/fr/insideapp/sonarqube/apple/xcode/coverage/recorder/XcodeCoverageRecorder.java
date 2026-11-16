@@ -17,9 +17,9 @@
  */
 package fr.insideapp.sonarqube.apple.xcode.coverage.recorder;
 
+import fr.insideapp.sonarqube.apple.commons.InputFileFinder;
 import fr.insideapp.sonarqube.apple.xcode.coverage.models.XcodeCodeCoverage;
 import fr.insideapp.sonarqube.apple.xcode.coverage.models.XcodeCodeCoverageMetadata;
-import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
@@ -74,13 +74,11 @@ public final class XcodeCoverageRecorder implements XcodeCoverageRecordable {
     }
 
     private InputFile getFile(String filePath) {
-        FilePredicate fp = context.fileSystem().predicates().hasPath(filePath);
-        if(context.fileSystem().hasFiles(fp)) {
-            return context.fileSystem().inputFile(fp);
-        } else {
+        InputFile inputFile = InputFileFinder.find(context.fileSystem(), filePath, context.fileSystem().predicates().all());
+        if (inputFile == null) {
             LOGGER.warn("Can't find file {}", filePath);
-            return null;
         }
+        return inputFile;
     }
 
 }

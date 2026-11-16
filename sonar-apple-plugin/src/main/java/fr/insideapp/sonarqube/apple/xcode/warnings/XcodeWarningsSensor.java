@@ -35,6 +35,8 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 
 public class XcodeWarningsSensor implements Sensor {
+
+    private static final Logger LOGGER = Loggers.get(XcodeWarningsSensor.class);
 
     private final Swift swift;
     private final ObjectiveC objectiveC;
@@ -91,6 +95,11 @@ public class XcodeWarningsSensor implements Sensor {
                     .toList();
         } else {
             final File resultBundle = extensionProvider.resultBundle(sensorContext.fileSystem(), config);
+            if (!resultBundle.exists()) {
+                // without this the sensor ran xcresulttool on a missing bundle on every scan
+                LOGGER.info("No Xcode result bundle at {}, skipping Xcode warnings", resultBundle);
+                return;
+            }
             final String xcodeResultReadOutput = runner.run(resultBundle);
             warningSummaries = parser.parse(xcodeResultReadOutput);
         }

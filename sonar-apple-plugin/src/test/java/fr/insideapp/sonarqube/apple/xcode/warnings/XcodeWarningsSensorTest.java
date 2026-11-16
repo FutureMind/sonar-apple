@@ -106,6 +106,17 @@ public final class XcodeWarningsSensorTest {
     }
 
     @Test
+    public void execute_noResultBundle_skips() {
+        // prepare
+        context.settings().setProperty("sonar.apple.resultBundlePath", "does-not-exist.xcresult");
+        // test
+        sensor.execute(context);
+        // assert
+        verify(runner, never()).run(any());
+        assertThat(context.allIssues()).isEmpty();
+    }
+
+    @Test
     public void execute_oneWarning() throws IOException {
         // prepare
         DefaultInputFile testFile = new TestInputFileBuilder("", "file.m")
@@ -122,6 +133,8 @@ public final class XcodeWarningsSensorTest {
         );
         File jsonFile = new File(baseDir, "one_warning.json");
         String jsonFileContent = FileUtils.readFileToString(jsonFile, Charset.defaultCharset());
+        // the runner path needs an existing result bundle; the test resources folder stands in for it
+        context.settings().setProperty("sonar.apple.resultBundlePath", ".");
         when(runner.run(any())).thenReturn(jsonFileContent);
         when(parser.parse(anyString())).thenReturn(List.of());
         when(converter.map(any())).thenReturn(Set.of());

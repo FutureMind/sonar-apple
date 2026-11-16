@@ -17,6 +17,7 @@
  */
 package fr.insideapp.sonarqube.apple.commons.issues;
 
+import fr.insideapp.sonarqube.apple.commons.InputFileFinder;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -61,13 +62,9 @@ public final class ReportIssueRecorder {
             final String filePath = issue.getFilePath();
             // We have a file location associated with the generated issue
             if (filePath != null) {
-                final FilePredicate relativePathPredicate = predicates.hasRelativePath(filePath);
-                final FilePredicate absolutePathPredicate = predicates.hasAbsolutePath(filePath);
-                final FilePredicate pathPredicate = predicates.or(absolutePathPredicate, relativePathPredicate);
-                final FilePredicate filePredicate = predicates.and(pathPredicate, mainPredicate);
-                InputFile inputFile = fs.inputFile(filePredicate);
+                InputFile inputFile = InputFileFinder.find(fs, filePath, mainPredicate);
                 // Making sure the file is part of SonarQube FS
-                if (fs.hasFiles(filePredicate) && inputFile != null) {
+                if (inputFile != null) {
                     // Adding the location of the file
                     sonarIssueLocation.on(inputFile);
                     final Integer lineNumber = issue.getLineNumber();
