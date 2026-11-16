@@ -23,13 +23,33 @@ public final class SourceLine {
     private final int start;
     private final int end;
     private final int line;
+    // code-point columns of the characters outside the BMP (emoji...) on this line
+    private final int[] supplementaryColumns;
 
     public SourceLine(final int line, final int count, final int start, final int end) {
+        this(line, count, start, end, new int[0]);
+    }
+
+    public SourceLine(final int line, final int count, final int start, final int end, final int[] supplementaryColumns) {
         this.line = line;
         this.count = count;
         this.start = start;
         this.end = end;
+        this.supplementaryColumns = supplementaryColumns;
+    }
 
+    /**
+     * ANTLR counts columns in code points, SonarQube text ranges count UTF-16 chars:
+     * every character outside the BMP before the column takes one extra char.
+     */
+    public int toCharColumn(final int codePointColumn) {
+        int column = codePointColumn;
+        for (int supplementaryColumn : supplementaryColumns) {
+            if (supplementaryColumn < codePointColumn) {
+                column++;
+            }
+        }
+        return column;
     }
 
     @Override

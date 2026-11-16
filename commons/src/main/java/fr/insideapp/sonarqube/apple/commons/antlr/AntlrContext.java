@@ -59,6 +59,18 @@ public abstract class AntlrContext {
         return new int[0];
     }
 
+    /**
+     * @param line            1-based line number
+     * @param codePointColumn column as counted by ANTLR
+     * @return the column in UTF-16 chars, as expected by SonarQube text ranges
+     */
+    public int toCharColumn(final int line, final int codePointColumn) {
+        if (lines == null || line < 1 || line > lines.length) {
+            return codePointColumn;
+        }
+        return lines[line - 1].toCharColumn(codePointColumn);
+    }
+
     public InputFile getFile() {
         return file;
     }

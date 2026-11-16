@@ -103,6 +103,8 @@ public class HighlighterVisitorTest {
         when(antlrContext.getLines()).thenReturn(lines);
         when(antlrContext.getTokens()).thenReturn(tokens);
         when(antlrContext.getFile()).thenReturn(testFile);
+        // no characters outside the BMP: code-point columns equal char columns
+        when(antlrContext.toCharColumn(org.mockito.ArgumentMatchers.anyInt(), org.mockito.ArgumentMatchers.anyInt())).thenAnswer(invocation -> invocation.getArgument(1));
         when(antlrContext.getLineAndColumn(1)).thenReturn(new int[]{1, 0});
         when(antlrContext.getLineAndColumn(2)).thenReturn(new int[]{2, 0});
         when(antlrContext.getLineAndColumn(3)).thenReturn(new int[]{3, 0});

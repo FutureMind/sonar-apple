@@ -40,27 +40,38 @@ public class SourceLinesProvider {
 
         try (final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(bomInputStream(inputStream), charset))) {
+            // positions are counted in code points, like the ANTLR char streams they are matched against
             int totalLines = 1;
             int global = 0;
             int count = 0;
+            final List<Integer> supplementaryColumns = new ArrayList<>();
 
             int currentChar;
             while ((currentChar = bufferedReader.read()) != -1) {
+                if (Character.isHighSurrogate((char) currentChar)) {
+                    // first half of a surrogate pair: the pair is a single code point
+                    supplementaryColumns.add(count);
+                    continue;
+                }
                 global++;
                 count++;
                 if (currentChar == 10) {
-                    sourceLines.add(new SourceLine(totalLines, count, global - count, global));
+                    sourceLines.add(new SourceLine(totalLines, count, global - count, global, toArray(supplementaryColumns)));
                     totalLines++;
                     count = 0;
+                    supplementaryColumns.clear();
                 }
-
             }
-            sourceLines.add(new SourceLine(totalLines, count, global - count, global));
+            sourceLines.add(new SourceLine(totalLines, count, global - count, global, toArray(supplementaryColumns)));
         } catch (final Exception e) {
             LOGGER.warn("Error occurred reading file", e);
         }
 
         return sourceLines.toArray(new SourceLine[0]);
+    }
+
+    private static int[] toArray(final List<Integer> values) {
+        return values.stream().mapToInt(Integer::intValue).toArray();
     }
 
     public BOMInputStream bomInputStream(final InputStream inputStream) throws IOException {

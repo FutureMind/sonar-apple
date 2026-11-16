@@ -28,6 +28,7 @@ import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -68,4 +69,34 @@ public class SwiftHighlighterVisitorTest {
         assertThat(context.highlightingTypeAt(testFile.key(), 3, 19)).containsExactlyInAnyOrder(TypeOfText.KEYWORD_LIGHT);
         assertThat(context.highlightingTypeAt(testFile.key(), 4, 20)).containsExactlyInAnyOrder(TypeOfText.STRING);
     }
+
+    @Test
+    public void fillContext_withCharactersOutsideBmp() throws IOException {
+        // each emoji is 1 code point for ANTLR but 2 UTF-16 chars for SonarQube
+        SensorContextTester context = highlight("let a = \"\uD83D\uDE00\uD83D\uDE00\uD83D\uDE00\"\nlet b = 1\n");
+        String key = "foo:emoji.swift";
+        assertThat(context.highlightingTypeAt(key, 1, 0)).containsExactlyInAnyOrder(TypeOfText.KEYWORD);
+        // the string body spans UTF-16 columns 9..14 (3 surrogate pairs)
+        assertThat(context.highlightingTypeAt(key, 1, 9)).containsExactlyInAnyOrder(TypeOfText.STRING);
+        assertThat(context.highlightingTypeAt(key, 1, 14)).containsExactlyInAnyOrder(TypeOfText.STRING);
+        // tokens on the next line are not shifted
+        assertThat(context.highlightingTypeAt(key, 2, 0)).containsExactlyInAnyOrder(TypeOfText.KEYWORD);
+        assertThat(context.highlightingTypeAt(key, 2, 4)).isEmpty();
+    }
+
+    private SensorContextTester highlight(String contents) throws IOException {
+        SensorContextTester context = SensorContextTester.create(new File(TEST_ROOT));
+        InputFile testFile = new TestInputFileBuilder("foo", "emoji.swift")
+                .setLanguage("swift")
+                .setModuleBaseDir(Paths.get(TEST_ROOT))
+                .setContents(contents)
+                .setCharset(StandardCharsets.UTF_8)
+                .build();
+        context.fileSystem().add(testFile);
+        SwiftAntlrContext antlrContext = new SwiftAntlrContext();
+        antlrContext.loadFromStreams(testFile, testFile.inputStream(), testFile.inputStream(), testFile.charset());
+        new CustomTreeVisitor(new SwiftHighlighterVisitor()).fillContext(context, antlrContext);
+        return context;
+    }
+
 }

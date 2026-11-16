@@ -109,7 +109,7 @@ public class HighlighterVisitor implements ParseTreeItemVisitor {
 
         for (final Token token : antlrContext.getTokens()) {
             final int startLine = token.getLine();
-            final int startLineOffset = token.getCharPositionInLine();
+            final int startLineOffset = antlrContext.toCharColumn(startLine, token.getCharPositionInLine());
             final int[] endDetails = antlrContext.getLineAndColumn(token.getStopIndex());
 
             if (endDetails == null
@@ -121,7 +121,7 @@ public class HighlighterVisitor implements ParseTreeItemVisitor {
             }
 
             final int endLine = endDetails[0];
-            final int endLineOffset = endDetails[1] + (token.getText().contains("\n") ? 0 : 1);
+            final int endLineOffset = antlrContext.toCharColumn(endLine, endDetails[1] + (token.getText().contains("\n") ? 0 : 1));
 
             try {
                 final TextRange range = file.newRange(startLine, startLineOffset, endLine, endLineOffset);
