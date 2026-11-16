@@ -1,17 +1,9 @@
 [
     {
-        "key": "anyobject_protocol",
-        "name": "AnyObject Protocol",
-        "severity": "MINOR",
-        "description": "Prefer using `AnyObject` over `class` for class-only protocols.",
-        "type": "CODE_SMELL",
-        "debt": "5min"
-    },
-    {
         "key": "array_init",
         "name": "Array Init",
         "severity": "MINOR",
-        "description": "Prefer using `Array(seq)` over `seq.map { $0 }` to convert a sequence into an Array.",
+        "description": "Prefer using `Array(seq)` over `seq.map { $0 }` to convert a sequence into an Array",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -19,7 +11,7 @@
         "key": "attributes",
         "name": "Attributes",
         "severity": "MINOR",
-        "description": "Attributes should be on their own lines in functions and types, but on the same line as variables and imports.",
+        "description": "Attributes should be on their own lines in functions and types, but on the same line as variables and imports",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -27,7 +19,7 @@
         "key": "block_based_kvo",
         "name": "Block Based KVO",
         "severity": "MINOR",
-        "description": "Prefer the new block based KVO API with keypaths when using Swift 3.2 or later.",
+        "description": "Prefer the new block based KVO API with keypaths when using Swift 3.2 or later",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -35,7 +27,7 @@
         "key": "class_delegate_protocol",
         "name": "Class Delegate Protocol",
         "severity": "MINOR",
-        "description": "Delegate protocols should be class-only so they can be weakly referenced.",
+        "description": "Delegate protocols should be class-only so they can be weakly referenced",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -43,7 +35,7 @@
         "key": "closing_brace",
         "name": "Closing Brace Spacing",
         "severity": "MINOR",
-        "description": "Closing brace with closing parenthesis should not have any whitespaces in the middle.",
+        "description": "Closing brace with closing parenthesis should not have any whitespaces in the middle",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -51,7 +43,7 @@
         "key": "closure_body_length",
         "name": "Closure Body Length",
         "severity": "MAJOR",
-        "description": "Closure bodies should not span too many lines.",
+        "description": "Closure bodies should not span too many lines",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -67,7 +59,7 @@
         "key": "closure_parameter_position",
         "name": "Closure Parameter Position",
         "severity": "MINOR",
-        "description": "Closure parameters should be on the same line as opening brace.",
+        "description": "Closure parameters should be on the same line as opening brace",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -75,7 +67,7 @@
         "key": "closure_spacing",
         "name": "Closure Spacing",
         "severity": "MINOR",
-        "description": "Closure expressions should have a single space inside each brace.",
+        "description": "Closure expressions should have a single space inside each brace",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -89,9 +81,9 @@
     },
     {
         "key": "colon",
-        "name": "Colon",
+        "name": "Colon Spacing",
         "severity": "MINOR",
-        "description": "Colons should be next to the identifier when specifying a type and next to the key in dictionary literals.",
+        "description": "Colons should be next to the identifier when specifying a type and next to the key in dictionary literals",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -99,7 +91,7 @@
         "key": "comma",
         "name": "Comma Spacing",
         "severity": "MINOR",
-        "description": "There should be no space before and one after any comma.",
+        "description": "There should be no space before and one after any comma",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -121,15 +113,15 @@
     },
     {
         "key": "contains_over_filter_count",
-        "name": "Contains Over Filter Count",
+        "name": "Contains over Filter Count",
         "severity": "MINOR",
-        "description": "Prefer `contains` over comparing `filter(where:).count` to 0.",
+        "description": "Prefer `contains` over comparing `filter(where:).count` to 0",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "contains_over_filter_is_empty",
-        "name": "Contains Over Filter Is Empty",
+        "name": "Contains over Filter is Empty",
         "severity": "MINOR",
         "description": "Prefer `contains` over using `filter(where:).isEmpty`",
         "type": "CODE_SMELL",
@@ -137,7 +129,7 @@
     },
     {
         "key": "contains_over_first_not_nil",
-        "name": "Contains over first not nil",
+        "name": "Contains over First not Nil",
         "severity": "MINOR",
         "description": "Prefer `contains` over `first(where:) != nil` and `firstIndex(where:) != nil`.",
         "type": "CODE_SMELL",
@@ -147,7 +139,7 @@
         "key": "control_statement",
         "name": "Control Statement",
         "severity": "MINOR",
-        "description": "`if`, `for`, `guard`, `switch`, `while`, and `catch` statements shouldn't unnecessarily wrap their conditionals or arguments in parentheses.",
+        "description": "`if`, `for`, `guard`, `switch`, `while`, and `catch` statements shouldn't unnecessarily wrap their conditionals or arguments in parentheses",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -155,15 +147,15 @@
         "key": "convenience_type",
         "name": "Convenience Type",
         "severity": "MINOR",
-        "description": "Types used for hosting only static members should be implemented as a caseless enum to avoid instantiation.",
+        "description": "Types used for hosting only static members should be implemented as a caseless enum to avoid instantiation",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "custom_rules",
-        "name": "Customs",
+        "name": "Custom Rules",
         "severity": "MINOR",
-        "description": "Create custom rules by providing a regex string. Optionally specify what syntax kinds to match against, the severity level, and what message to display.",
+        "description": "Create custom rules by providing a regex string. Optionally specify what syntax kinds to match against, the severity level, and what message to display. Rules default to SwiftSyntax mode for improved performance. Use `execution_mode: sourcekit` or `default_execution_mode: sourcekit` for SourceKit mode.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -187,7 +179,7 @@
         "key": "discarded_notification_center_observer",
         "name": "Discarded Notification Center Observer",
         "severity": "MINOR",
-        "description": "When registering for a notification using a block, the opaque observer that is returned should be stored so it can be removed later.",
+        "description": "When registering for a notification using a block, the opaque observer that is returned should be stored so it can be removed later",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -195,7 +187,7 @@
         "key": "discouraged_direct_init",
         "name": "Discouraged Direct Initialization",
         "severity": "MINOR",
-        "description": "Discouraged direct initialization of types that can be harmful.",
+        "description": "Discouraged direct initialization of types that can be harmful",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -203,7 +195,7 @@
         "key": "discouraged_object_literal",
         "name": "Discouraged Object Literal",
         "severity": "MINOR",
-        "description": "Prefer initializers over object literals.",
+        "description": "Prefer initializers over object literals",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -211,7 +203,7 @@
         "key": "discouraged_optional_boolean",
         "name": "Discouraged Optional Boolean",
         "severity": "MINOR",
-        "description": "Prefer non-optional booleans over optional booleans.",
+        "description": "Prefer non-optional booleans over optional booleans",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -219,7 +211,7 @@
         "key": "discouraged_optional_collection",
         "name": "Discouraged Optional Collection",
         "severity": "MINOR",
-        "description": "Prefer empty collection over optional collection.",
+        "description": "Prefer empty collection over optional collection",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -227,7 +219,7 @@
         "key": "duplicate_enum_cases",
         "name": "Duplicate Enum Cases",
         "severity": "MINOR",
-        "description": "Enum can't contain multiple cases with the same name.",
+        "description": "Enum shouldn't contain multiple cases with the same name",
         "type": "BUG",
         "debt": "5min"
     },
@@ -235,7 +227,7 @@
         "key": "duplicate_imports",
         "name": "Duplicate Imports",
         "severity": "MINOR",
-        "description": "Imports should be unique.",
+        "description": "Imports should be unique",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -243,7 +235,7 @@
         "key": "dynamic_inline",
         "name": "Dynamic Inline",
         "severity": "MINOR",
-        "description": "Avoid using 'dynamic' and '@inline(__always)' together.",
+        "description": "Avoid using 'dynamic' and '@inline(__always)' together",
         "type": "BUG",
         "debt": "5min"
     },
@@ -251,7 +243,7 @@
         "key": "empty_collection_literal",
         "name": "Empty Collection Literal",
         "severity": "MINOR",
-        "description": "Prefer checking `isEmpty` over comparing collection to an empty array or dictionary literal.",
+        "description": "Prefer checking `isEmpty` over comparing collection to an empty array or dictionary literal",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -259,7 +251,7 @@
         "key": "empty_count",
         "name": "Empty Count",
         "severity": "MINOR",
-        "description": "Prefer checking `isEmpty` over comparing `count` to zero.",
+        "description": "Prefer checking `isEmpty` over comparing `count` to zero",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -267,7 +259,7 @@
         "key": "empty_enum_arguments",
         "name": "Empty Enum Arguments",
         "severity": "MINOR",
-        "description": "Arguments can be omitted when matching enums with associated types if they are not used.",
+        "description": "Arguments can be omitted when matching enums with associated values if they are not used",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -275,7 +267,7 @@
         "key": "empty_parameters",
         "name": "Empty Parameters",
         "severity": "MINOR",
-        "description": "Prefer `() -> ` over `Void -> `.",
+        "description": "Prefer `() -> ` over `Void -> `",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -283,7 +275,7 @@
         "key": "empty_parentheses_with_trailing_closure",
         "name": "Empty Parentheses with Trailing Closure",
         "severity": "MINOR",
-        "description": "When using trailing closures, empty parentheses should be avoided after the method call.",
+        "description": "When using trailing closures, empty parentheses should be avoided after the method call",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -291,7 +283,7 @@
         "key": "empty_string",
         "name": "Empty String",
         "severity": "MINOR",
-        "description": "Prefer checking `isEmpty` over comparing `string` to an empty string literal.",
+        "description": "Prefer checking `isEmpty` over comparing `string` to an empty string literal",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -299,7 +291,7 @@
         "key": "empty_xctest_method",
         "name": "Empty XCTest Method",
         "severity": "MINOR",
-        "description": "Empty XCTest method should be avoided.",
+        "description": "Empty XCTest method should be avoided",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -307,7 +299,7 @@
         "key": "explicit_acl",
         "name": "Explicit ACL",
         "severity": "MINOR",
-        "description": "All declarations should specify Access Control Level keywords explicitly.",
+        "description": "All declarations should specify Access Control Level keywords explicitly",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -315,7 +307,7 @@
         "key": "explicit_enum_raw_value",
         "name": "Explicit Enum Raw Value",
         "severity": "MINOR",
-        "description": "Enums should be explicitly assigned their raw values.",
+        "description": "Enums should be explicitly assigned their raw values",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -323,7 +315,7 @@
         "key": "explicit_init",
         "name": "Explicit Init",
         "severity": "MINOR",
-        "description": "Explicitly calling .init() should be avoided.",
+        "description": "Explicitly calling .init() should be avoided",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -331,7 +323,7 @@
         "key": "explicit_self",
         "name": "Explicit Self",
         "severity": "MINOR",
-        "description": "Instance variables and functions should be explicitly accessed with 'self.'.",
+        "description": "Instance variables and functions should be explicitly accessed with 'self.'",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -339,7 +331,7 @@
         "key": "explicit_top_level_acl",
         "name": "Explicit Top Level ACL",
         "severity": "MINOR",
-        "description": "Top-level declarations should specify Access Control Level keywords explicitly.",
+        "description": "Top-level declarations should specify Access Control Level keywords explicitly",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -363,7 +355,7 @@
         "key": "fallthrough",
         "name": "Fallthrough",
         "severity": "MINOR",
-        "description": "Fallthrough should be avoided.",
+        "description": "Fallthrough should be avoided",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -371,7 +363,7 @@
         "key": "fatal_error_message",
         "name": "Fatal Error Message",
         "severity": "MINOR",
-        "description": "A fatalError call should have a message.",
+        "description": "A fatalError call should have a message",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -385,7 +377,7 @@
     },
     {
         "key": "file_length",
-        "name": "File Line Length",
+        "name": "File Length",
         "severity": "MAJOR",
         "description": "Files should not span too many lines.",
         "type": "CODE_SMELL",
@@ -395,7 +387,7 @@
         "key": "file_name",
         "name": "File Name",
         "severity": "MINOR",
-        "description": "File name should match a type or extension declared in the file (if any).",
+        "description": "File name should match a type or extension declared in the file (if any)",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -411,15 +403,15 @@
         "key": "first_where",
         "name": "First Where",
         "severity": "MINOR",
-        "description": "Prefer using `.first(where:)` over `.filter { }.first` in collections.",
+        "description": "Prefer using `.first(where:)` over `.filter { }.first` in collections",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "for_where",
-        "name": "For Where",
+        "name": "Prefer For-Where",
         "severity": "MINOR",
-        "description": "`where` clauses are preferred over a single `if` inside a `for`.",
+        "description": "`where` clauses are preferred over a single `if` inside a `for`",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -427,7 +419,7 @@
         "key": "force_cast",
         "name": "Force Cast",
         "severity": "MAJOR",
-        "description": "Force casts should be avoided.",
+        "description": "Force casts should be avoided",
         "type": "BUG",
         "debt": "10min"
     },
@@ -435,7 +427,7 @@
         "key": "force_try",
         "name": "Force Try",
         "severity": "MAJOR",
-        "description": "Force tries should be avoided.",
+        "description": "Force tries should be avoided",
         "type": "BUG",
         "debt": "10min"
     },
@@ -443,7 +435,7 @@
         "key": "force_unwrapping",
         "name": "Force Unwrapping",
         "severity": "MAJOR",
-        "description": "Force unwrapping should be avoided.",
+        "description": "Force unwrapping should be avoided",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -451,7 +443,7 @@
         "key": "function_body_length",
         "name": "Function Body Length",
         "severity": "MAJOR",
-        "description": "Functions bodies should not span too many lines.",
+        "description": "Function bodies should not span too many lines",
         "type": "CODE_SMELL",
         "debt": "30min"
     },
@@ -459,7 +451,7 @@
         "key": "function_default_parameter_at_end",
         "name": "Function Default Parameter at End",
         "severity": "MINOR",
-        "description": "Prefer to locate parameters with defaults toward the end of the parameter list.",
+        "description": "Prefer to locate parameters with defaults toward the end of the parameter list",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -483,7 +475,7 @@
         "key": "identical_operands",
         "name": "Identical Operands",
         "severity": "MINOR",
-        "description": "Comparing two identical operands is likely a mistake.",
+        "description": "Comparing two identical operands is likely a mistake",
         "type": "BUG",
         "debt": "5min"
     },
@@ -491,7 +483,7 @@
         "key": "identifier_name",
         "name": "Identifier Name",
         "severity": "MINOR",
-        "description": "Identifier names should only contain alphanumeric characters and start with a lowercase character or should only contain capital letters. In an exception to the above, variable names may start with a capital letter when they are declared static and immutable. Variable names should not be too long or too short.",
+        "description": "Identifier names should only contain alphanumeric characters and start with a lowercase character or should only contain capital letters. In an exception to the above, variable names may start with a capital letter when they are declared as static. Variable names should not be too long or too short.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -507,7 +499,7 @@
         "key": "implicit_return",
         "name": "Implicit Return",
         "severity": "MINOR",
-        "description": "Prefer implicit returns in closures.",
+        "description": "Prefer implicit returns in closures, functions and getters",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -515,15 +507,7 @@
         "key": "implicitly_unwrapped_optional",
         "name": "Implicitly Unwrapped Optional",
         "severity": "MINOR",
-        "description": "Implicitly unwrapped optionals should be avoided when possible.",
-        "type": "CODE_SMELL",
-        "debt": "5min"
-    },
-    {
-        "key": "inert_defer",
-        "name": "Inert Defer",
-        "severity": "MINOR",
-        "description": "If defer is at the end of its parent scope, it will be executed right where it is anyway.",
+        "description": "Implicitly unwrapped optionals should be avoided when possible",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -531,7 +515,7 @@
         "key": "is_disjoint",
         "name": "Is Disjoint",
         "severity": "MINOR",
-        "description": "Prefer using `Set.isDisjoint(with:)` over `Set.intersection(_:).isEmpty`.",
+        "description": "Prefer using `Set.isDisjoint(with:)` over `Set.intersection(_:).isEmpty`",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -539,7 +523,7 @@
         "key": "joined_default_parameter",
         "name": "Joined Default Parameter",
         "severity": "MINOR",
-        "description": "Discouraged explicit usage of the default separator.",
+        "description": "Discouraged explicit usage of the default separator",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -555,7 +539,7 @@
         "key": "last_where",
         "name": "Last Where",
         "severity": "MINOR",
-        "description": "Prefer using `.last(where:)` over `.filter { }.last` in collections.",
+        "description": "Prefer using `.last(where:)` over `.filter { }.last` in collections",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -563,7 +547,7 @@
         "key": "leading_whitespace",
         "name": "Leading Whitespace",
         "severity": "MINOR",
-        "description": "Files should not contain leading whitespace.",
+        "description": "Files should not contain leading whitespace",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -579,7 +563,7 @@
         "key": "legacy_constant",
         "name": "Legacy Constant",
         "severity": "MINOR",
-        "description": "Struct-scoped constants are preferred over legacy global constants.",
+        "description": "Struct-scoped constants are preferred over legacy global constants",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -587,7 +571,7 @@
         "key": "legacy_constructor",
         "name": "Legacy Constructor",
         "severity": "MINOR",
-        "description": "Swift constructors are preferred over legacy convenience functions.",
+        "description": "Swift constructors are preferred over legacy convenience functions",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -603,7 +587,7 @@
         "key": "legacy_multiple",
         "name": "Legacy Multiple",
         "severity": "MINOR",
-        "description": "Prefer using the `isMultiple(of:)` function instead of using the remainder operator (`%`).",
+        "description": "Prefer using the `isMultiple(of:)` function instead of using the remainder operator (`%`)",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -619,7 +603,7 @@
         "key": "legacy_random",
         "name": "Legacy Random",
         "severity": "MINOR",
-        "description": "Prefer using `type.random(in:)` over legacy functions.",
+        "description": "Prefer using `type.random(in:)` over legacy functions",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -627,7 +611,7 @@
         "key": "let_var_whitespace",
         "name": "Variable Declaration Whitespace",
         "severity": "MINOR",
-        "description": "Let and var should be separated from other statements by a blank line.",
+        "description": "Variable declarations should be separated from other statements by a blank line",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -643,15 +627,15 @@
         "key": "literal_expression_end_indentation",
         "name": "Literal Expression End Indentation",
         "severity": "MINOR",
-        "description": "Array and dictionary literal end should have the same indentation as the line that started it.",
+        "description": "Array and dictionary literal end should have the same indentation as the line that started it",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "lower_acl_than_parent",
-        "name": "Lower ACL than parent",
+        "name": "Lower ACL than Parent",
         "severity": "MINOR",
-        "description": "Ensure definitions have a lower access control level than their enclosing parent",
+        "description": "Ensure declarations have a lower access control level than their enclosing parent",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -683,7 +667,7 @@
         "key": "multiline_arguments",
         "name": "Multiline Arguments",
         "severity": "MINOR",
-        "description": "Arguments should be either on the same line, or one per line.",
+        "description": "Arguments should be either on the same line, or one per line",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -691,7 +675,7 @@
         "key": "multiline_arguments_brackets",
         "name": "Multiline Arguments Brackets",
         "severity": "MINOR",
-        "description": "Multiline arguments should have their surrounding brackets in a new line.",
+        "description": "Multiline arguments should have their surrounding brackets in a new line",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -699,7 +683,7 @@
         "key": "multiline_function_chains",
         "name": "Multiline Function Chains",
         "severity": "MINOR",
-        "description": "Chained function calls should be either on the same line, or one per line.",
+        "description": "Chained function calls should be either on the same line, or one per line",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -707,7 +691,7 @@
         "key": "multiline_literal_brackets",
         "name": "Multiline Literal Brackets",
         "severity": "MINOR",
-        "description": "Multiline literals should have their surrounding brackets in a new line.",
+        "description": "Multiline literals should have their surrounding brackets in a new line",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -715,7 +699,7 @@
         "key": "multiline_parameters",
         "name": "Multiline Parameters",
         "severity": "MINOR",
-        "description": "Functions and methods parameters should be either on the same line, or one per line.",
+        "description": "Functions and methods parameters should be either on the same line, or one per line",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -723,7 +707,7 @@
         "key": "multiline_parameters_brackets",
         "name": "Multiline Parameters Brackets",
         "severity": "MINOR",
-        "description": "Multiline parameters should have their surrounding brackets in a new line.",
+        "description": "Multiline parameters should have their surrounding brackets in a new line",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -731,7 +715,7 @@
         "key": "multiple_closures_with_trailing_closure",
         "name": "Multiple Closures with Trailing Closure",
         "severity": "MINOR",
-        "description": "Trailing closure syntax should not be used when passing more than one closure argument.",
+        "description": "Trailing closure syntax should not be used when passing more than one closure argument",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -739,7 +723,7 @@
         "key": "nesting",
         "name": "Nesting",
         "severity": "CRITICAL",
-        "description": "Types should be nested at most 1 level deep, and statements should be nested at most 5 levels deep.",
+        "description": "Types should be nested at most 1 level deep, and functions should be nested at most 2 levels deep.",
         "type": "CODE_SMELL",
         "debt": "30min"
     },
@@ -747,7 +731,7 @@
         "key": "nimble_operator",
         "name": "Nimble Operator",
         "severity": "MINOR",
-        "description": "Prefer Nimble operator overloads over free matcher functions.",
+        "description": "Prefer Nimble operator overloads over free matcher functions",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -761,9 +745,9 @@
     },
     {
         "key": "no_fallthrough_only",
-        "name": "No Fallthrough Only",
+        "name": "No Fallthrough only",
         "severity": "MINOR",
-        "description": "Fallthroughs can only be used if the `case` contains at least one other statement.",
+        "description": "Fallthroughs can only be used if the `case` contains at least one other statement",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -771,7 +755,7 @@
         "key": "no_grouping_extension",
         "name": "No Grouping Extension",
         "severity": "MINOR",
-        "description": "Extensions shouldn't be used to group code within the same source file.",
+        "description": "Extensions shouldn't be used to group code within the same source file",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -779,7 +763,7 @@
         "key": "no_space_in_method_call",
         "name": "No Space in Method Call",
         "severity": "MINOR",
-        "description": "Don't add a space between the method name and the parentheses.",
+        "description": "Don't add a space between the method name and the parentheses",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -787,7 +771,7 @@
         "key": "notification_center_detachment",
         "name": "Notification Center Detachment",
         "severity": "MINOR",
-        "description": "An object should only remove itself as an observer in `deinit`.",
+        "description": "An object should only remove itself as an observer in `deinit`",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -795,7 +779,7 @@
         "key": "nslocalizedstring_key",
         "name": "NSLocalizedString Key",
         "severity": "MINOR",
-        "description": "Static strings should be used as key in NSLocalizedString in order to genstrings work.",
+        "description": "Static strings should be used as key/comment in NSLocalizedString in order for genstrings to work",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -803,7 +787,7 @@
         "key": "nslocalizedstring_require_bundle",
         "name": "NSLocalizedString Require Bundle",
         "severity": "MINOR",
-        "description": "Calls to NSLocalizedString should specify the bundle which contains the strings file.",
+        "description": "Calls to NSLocalizedString should specify the bundle which contains the strings file",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -811,7 +795,7 @@
         "key": "nsobject_prefer_isequal",
         "name": "NSObject Prefer isEqual",
         "severity": "MINOR",
-        "description": "NSObject subclasses should implement isEqual instead of ==.",
+        "description": "NSObject subclasses should implement isEqual instead of ==",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -819,7 +803,7 @@
         "key": "number_separator",
         "name": "Number Separator",
         "severity": "MINOR",
-        "description": "Underscores should be used as thousand separator in large decimal numbers.",
+        "description": "Underscores should be used as thousand separator in large numbers with a configurable number of digits. In other words, there should be an underscore after every 3 digits in the integral as well as the fractional part of a number.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -827,7 +811,7 @@
         "key": "object_literal",
         "name": "Object Literal",
         "severity": "MINOR",
-        "description": "Prefer object literals over image and color inits.",
+        "description": "Prefer object literals over image and color inits",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -835,7 +819,7 @@
         "key": "opening_brace",
         "name": "Opening Brace Spacing",
         "severity": "MINOR",
-        "description": "Opening braces should be preceded by a single space and on the same line as the declaration.",
+        "description": "The correct positioning of braces that introduce a block of code or member list is highly controversial. No matter which style is preferred, consistency is key. Apart from different tastes, the positioning of braces can also have a significant impact on the readability of the code, especially for visually impaired developers. This rule ensures that braces are preceded by a single space and on the same line as the declaration. Comments between the declaration and the opening brace are respected. Check out the `contrasted_opening_brace` rule for a different style.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -843,23 +827,15 @@
         "key": "operator_usage_whitespace",
         "name": "Operator Usage Whitespace",
         "severity": "MINOR",
-        "description": "Operators should be surrounded by a single whitespace when they are being used.",
+        "description": "Operators should be surrounded by a single whitespace when they are being used",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
     {
-        "key": "operator_whitespace",
-        "name": "Operator Function Whitespace",
-        "severity": "MINOR",
-        "description": "Operators should be surrounded by a single whitespace when defining them.",
-        "type": "CODE_SMELL",
-        "debt": "5min"
-    },
-    {
         "key": "overridden_super_call",
-        "name": "Overridden methods call super",
+        "name": "Overridden Method Calls Super",
         "severity": "MINOR",
-        "description": "Some overridden methods should always call super",
+        "description": "Some overridden methods should always call super.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -867,7 +843,7 @@
         "key": "override_in_extension",
         "name": "Override in Extension",
         "severity": "MINOR",
-        "description": "Extensions shouldn't override declarations.",
+        "description": "Extensions shouldn't override declarations",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -875,7 +851,7 @@
         "key": "pattern_matching_keywords",
         "name": "Pattern Matching Keywords",
         "severity": "MINOR",
-        "description": "Combine multiple pattern matching bindings by moving keywords out of tuples.",
+        "description": "Combine multiple pattern matching bindings by moving binding keywords out of tuples and associated values",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -883,7 +859,7 @@
         "key": "prefixed_toplevel_constant",
         "name": "Prefixed Top-Level Constant",
         "severity": "MINOR",
-        "description": "Top-level constants should be prefixed by `k`.",
+        "description": "Top-level constants should be prefixed by `k`",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -891,7 +867,7 @@
         "key": "private_action",
         "name": "Private Actions",
         "severity": "MINOR",
-        "description": "IBActions should be private.",
+        "description": "IBActions should be private",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -899,15 +875,15 @@
         "key": "private_outlet",
         "name": "Private Outlets",
         "severity": "MINOR",
-        "description": "IBOutlets should be private to avoid leaking UIKit to higher layers.",
+        "description": "IBOutlets should be private to avoid leaking UIKit to higher layers",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "private_over_fileprivate",
-        "name": "Private over fileprivate",
+        "name": "Private over Fileprivate",
         "severity": "MINOR",
-        "description": "Prefer `private` over `fileprivate` declarations.",
+        "description": "Prefer `private` over `fileprivate` declarations",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -915,7 +891,7 @@
         "key": "private_unit_test",
         "name": "Private Unit Test",
         "severity": "MINOR",
-        "description": "Unit tests marked private are silently skipped.",
+        "description": "Unit tests marked private are silently skipped",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -923,15 +899,15 @@
         "key": "prohibited_interface_builder",
         "name": "Prohibited Interface Builder",
         "severity": "MINOR",
-        "description": "Creating views using Interface Builder should be avoided.",
+        "description": "Creating views using Interface Builder should be avoided",
         "type": "CODE_SMELL",
         "debt": "15min"
     },
     {
         "key": "prohibited_super_call",
-        "name": "Prohibited calls to super",
+        "name": "Prohibited Calls to Super",
         "severity": "MINOR",
-        "description": "Some methods should not call super",
+        "description": "Some methods should not call super.",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -939,7 +915,7 @@
         "key": "protocol_property_accessors_order",
         "name": "Protocol Property Accessors Order",
         "severity": "MINOR",
-        "description": "When declaring properties in protocols, the order of accessors should be `get set`.",
+        "description": "When declaring properties in protocols, the order of accessors should be `get set`",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -955,7 +931,7 @@
         "key": "quick_discouraged_focused_test",
         "name": "Quick Discouraged Focused Test",
         "severity": "MINOR",
-        "description": "Discouraged focused test. Other tests won't run while this one is focused.",
+        "description": "Non-focused tests won't run as long as this test is focused",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -963,7 +939,7 @@
         "key": "quick_discouraged_pending_test",
         "name": "Quick Discouraged Pending Test",
         "severity": "MINOR",
-        "description": "Discouraged pending test. This test won't run while it's marked as pending.",
+        "description": "This test won't run as long as it's marked pending",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -971,13 +947,13 @@
         "key": "reduce_boolean",
         "name": "Reduce Boolean",
         "severity": "MINOR",
-        "description": "Prefer using `.allSatisfy()` or `.contains()` over `reduce(true)` or `reduce(false)`",
+        "description": "Prefer using `.allSatisfy()` or `.contains()` over `reduce(true)` or `reduce(false)`.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "reduce_into",
-        "name": "Reduce Into",
+        "name": "Reduce into",
         "severity": "MINOR",
         "description": "Prefer `reduce(into:_:)` over `reduce(_:_:)` for copy-on-write types",
         "type": "CODE_SMELL",
@@ -987,7 +963,7 @@
         "key": "redundant_discardable_let",
         "name": "Redundant Discardable Let",
         "severity": "MINOR",
-        "description": "Prefer `_ = foo()` over `let _ = foo()` when discarding a result from a function.",
+        "description": "Prefer `_ = foo()` over `let _ = foo()` when discarding a result from a function",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -995,7 +971,7 @@
         "key": "redundant_nil_coalescing",
         "name": "Redundant Nil Coalescing",
         "severity": "MINOR",
-        "description": "nil coalescing operator is only evaluated if the lhs is nil, coalescing operator with nil as rhs is redundant",
+        "description": "Coalescing operator with right-hand side nil is redundant",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -1003,23 +979,15 @@
         "key": "redundant_objc_attribute",
         "name": "Redundant @objc Attribute",
         "severity": "MINOR",
-        "description": "Objective-C attribute (@objc) is redundant in declaration.",
+        "description": "Objective-C attribute (@objc) is redundant in declaration",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
     {
-        "key": "redundant_optional_initialization",
-        "name": "Redundant Optional Initialization",
-        "severity": "MINOR",
-        "description": "Initializing an optional variable with nil is redundant.",
-        "type": "CODE_SMELL",
-        "debt": "5min"
-    },
-    {
         "key": "redundant_set_access_control",
-        "name": "Redundant Set Access Control",
+        "name": "Redundant Access Control for Setter",
         "severity": "MINOR",
-        "description": "Property setter access level shouldn't be explicit if it's the same as the variable access level.",
+        "description": "Property setter access level shouldn't be explicit if it's the same as the variable access level",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1027,7 +995,7 @@
         "key": "redundant_string_enum_value",
         "name": "Redundant String Enum Value",
         "severity": "MINOR",
-        "description": "String enum values can be omitted when they are equal to the enumcase name.",
+        "description": "String enum values can be omitted when they are equal to the enumcase name",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1043,7 +1011,7 @@
         "key": "redundant_void_return",
         "name": "Redundant Void Return",
         "severity": "MINOR",
-        "description": "Returning Void in a function declaration is redundant.",
+        "description": "Returning Void in a function declaration is redundant",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1051,7 +1019,7 @@
         "key": "required_deinit",
         "name": "Required Deinit",
         "severity": "MINOR",
-        "description": "Classes should have an explicit deinit method.",
+        "description": "Classes should have an explicit deinit method",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1067,7 +1035,7 @@
         "key": "return_arrow_whitespace",
         "name": "Returning Whitespace",
         "severity": "MINOR",
-        "description": "Return arrow and return type should be separated by a single space or on a separate line.",
+        "description": "Return arrow and return type should be separated by a single space or on a separate line",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1075,7 +1043,7 @@
         "key": "shorthand_operator",
         "name": "Shorthand Operator",
         "severity": "MINOR",
-        "description": "Prefer shorthand operators (+=, -=, *=, /=) over doing the operation and assigning.",
+        "description": "Prefer shorthand operators (+=, -=, *=, /=) over doing the operation and assigning",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1099,7 +1067,7 @@
         "key": "sorted_imports",
         "name": "Sorted Imports",
         "severity": "MINOR",
-        "description": "Imports should be sorted.",
+        "description": "Imports should be sorted",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1107,7 +1075,7 @@
         "key": "statement_position",
         "name": "Statement Position",
         "severity": "MINOR",
-        "description": "Else and catch should be on the same line, one space after the previous declaration.",
+        "description": "Else and catch should be on the same line, one space after the previous declaration",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
@@ -1115,15 +1083,15 @@
         "key": "static_operator",
         "name": "Static Operator",
         "severity": "MINOR",
-        "description": "Operators should be declared as static functions, not free functions.",
+        "description": "Operators should be declared as static functions, not free functions",
         "type": "CODE_SMELL",
         "debt": "10min"
     },
     {
         "key": "strict_fileprivate",
-        "name": "Strict fileprivate",
+        "name": "Strict Fileprivate",
         "severity": "MINOR",
-        "description": "`fileprivate` should be avoided.",
+        "description": "`fileprivate` should be avoided",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1131,7 +1099,7 @@
         "key": "strong_iboutlet",
         "name": "Strong IBOutlet",
         "severity": "MINOR",
-        "description": "@IBOutlets shouldn't be declared as weak.",
+        "description": "@IBOutlets shouldn't be declared as weak",
         "type": "BUG",
         "debt": "1min"
     },
@@ -1147,13 +1115,13 @@
         "key": "switch_case_alignment",
         "name": "Switch and Case Statement Alignment",
         "severity": "MINOR",
-        "description": "Case statements should vertically align with their enclosing switch statement, or indented if configured otherwise.",
+        "description": "Case statements should vertically align with their closing brace, or indented if configured otherwise.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "switch_case_on_newline",
-        "name": "Switch Case on Newline",
+        "name": "Cases on Newline",
         "severity": "MINOR",
         "description": "Cases inside a switch should always be on a newline",
         "type": "CODE_SMELL",
@@ -1179,7 +1147,7 @@
         "key": "toggle_bool",
         "name": "Toggle Bool",
         "severity": "MINOR",
-        "description": "Prefer `someBool.toggle()` over `someBool = !someBool`.",
+        "description": "Prefer `someBool.toggle()` over `someBool = !someBool`",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1187,7 +1155,7 @@
         "key": "trailing_closure",
         "name": "Trailing Closure",
         "severity": "MINOR",
-        "description": "Trailing closure syntax should be used whenever possible.",
+        "description": "Trailing closure syntax should be used whenever possible",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1203,7 +1171,7 @@
         "key": "trailing_newline",
         "name": "Trailing Newline",
         "severity": "MINOR",
-        "description": "Files should have a single trailing newline.",
+        "description": "Files should have a single trailing newline",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1211,7 +1179,7 @@
         "key": "trailing_semicolon",
         "name": "Trailing Semicolon",
         "severity": "MINOR",
-        "description": "Lines should not have trailing semicolons.",
+        "description": "Lines should not have trailing semicolons",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1219,7 +1187,7 @@
         "key": "trailing_whitespace",
         "name": "Trailing Whitespace",
         "severity": "MINOR",
-        "description": "Lines should not have trailing whitespace.",
+        "description": "Lines should not have trailing whitespace",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1227,7 +1195,7 @@
         "key": "type_body_length",
         "name": "Type Body Length",
         "severity": "MAJOR",
-        "description": "Type bodies should not span too many lines.",
+        "description": "Type bodies should not span too many lines",
         "type": "CODE_SMELL",
         "debt": "30min"
     },
@@ -1251,7 +1219,7 @@
         "key": "unavailable_function",
         "name": "Unavailable Function",
         "severity": "MINOR",
-        "description": "Unimplemented functions should be marked as unavailable.",
+        "description": "Unimplemented functions should be marked as unavailable",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1259,7 +1227,7 @@
         "key": "unneeded_break_in_switch",
         "name": "Unneeded Break in Switch",
         "severity": "MINOR",
-        "description": "Avoid using unneeded break statements.",
+        "description": "Avoid using unneeded break statements",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1267,7 +1235,7 @@
         "key": "unneeded_parentheses_in_closure_argument",
         "name": "Unneeded Parentheses in Closure Argument",
         "severity": "MINOR",
-        "description": "Parentheses are not needed when declaring closure arguments.",
+        "description": "Parentheses are not needed when declaring closure arguments",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1275,7 +1243,7 @@
         "key": "unowned_variable_capture",
         "name": "Unowned Variable Capture",
         "severity": "MINOR",
-        "description": "Prefer capturing references as weak to avoid potential crashes.",
+        "description": "Prefer capturing references as weak to avoid potential crashes",
         "type": "BUG",
         "debt": "5min"
     },
@@ -1283,15 +1251,7 @@
         "key": "untyped_error_in_catch",
         "name": "Untyped Error in Catch",
         "severity": "MINOR",
-        "description": "Catch statements should not declare error variables without type casting.",
-        "type": "CODE_SMELL",
-        "debt": "5min"
-    },
-    {
-        "key": "unused_capture_list",
-        "name": "Unused Capture List",
-        "severity": "MINOR",
-        "description": "Unused reference in a capture list should be removed.",
+        "description": "Catch statements should not declare error variables without type casting",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1299,7 +1259,7 @@
         "key": "unused_closure_parameter",
         "name": "Unused Closure Parameter",
         "severity": "MINOR",
-        "description": "Unused parameter in a closure should be replaced with _.",
+        "description": "Unused parameter in a closure should be replaced with _",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1307,7 +1267,7 @@
         "key": "unused_control_flow_label",
         "name": "Unused Control Flow Label",
         "severity": "MINOR",
-        "description": "Unused control flow label should be removed.",
+        "description": "Unused control flow label should be removed",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1315,7 +1275,7 @@
         "key": "unused_declaration",
         "name": "Unused Declaration",
         "severity": "MINOR",
-        "description": "Declarations should be referenced at least once within all files linted.",
+        "description": "Declarations should be referenced at least once within all files linted",
         "type": "BUG",
         "debt": "5min"
     },
@@ -1331,7 +1291,7 @@
         "key": "unused_import",
         "name": "Unused Import",
         "severity": "MINOR",
-        "description": "All imported modules should be required to make the file compile.",
+        "description": "All imported modules should be required to make the file compile",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1347,7 +1307,7 @@
         "key": "unused_setter_value",
         "name": "Unused Setter Value",
         "severity": "MINOR",
-        "description": "Setter value is not used.",
+        "description": "Setter value is not used",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1363,15 +1323,15 @@
         "key": "vertical_parameter_alignment",
         "name": "Vertical Parameter Alignment",
         "severity": "MINOR",
-        "description": "Function parameters should be aligned vertically if they're in multiple lines in a declaration.",
+        "description": "Function parameters should be aligned vertically if they're in multiple lines in a declaration",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "vertical_parameter_alignment_on_call",
-        "name": "Vertical Parameter Alignment On Call",
+        "name": "Vertical Parameter Alignment on Call",
         "severity": "MINOR",
-        "description": "Function parameters should be aligned vertically if they're in multiple lines in a method call.",
+        "description": "Function parameters should be aligned vertically if they're in multiple lines in a method call",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1379,7 +1339,7 @@
         "key": "vertical_whitespace",
         "name": "Vertical Whitespace",
         "severity": "MINOR",
-        "description": "Limit vertical whitespace to a single empty line.",
+        "description": "Limit vertical whitespace to a single empty line",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1387,7 +1347,7 @@
         "key": "vertical_whitespace_between_cases",
         "name": "Vertical Whitespace Between Cases",
         "severity": "MINOR",
-        "description": "Include a single empty line between switch cases.",
+        "description": "Include a single empty line between switch cases",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1395,7 +1355,7 @@
         "key": "vertical_whitespace_closing_braces",
         "name": "Vertical Whitespace before Closing Braces",
         "severity": "MINOR",
-        "description": "Don't include vertical whitespace (empty line) before closing braces.",
+        "description": "Don't include vertical whitespace (empty line) before closing braces",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1403,7 +1363,7 @@
         "key": "vertical_whitespace_opening_braces",
         "name": "Vertical Whitespace after Opening Braces",
         "severity": "MINOR",
-        "description": "Don't include vertical whitespace (empty line) after opening braces.",
+        "description": "Don't include vertical whitespace (empty line) after opening braces",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1411,7 +1371,7 @@
         "key": "void_return",
         "name": "Void Return",
         "severity": "MINOR",
-        "description": "Prefer `-> Void` over `-> ()`.",
+        "description": "Prefer `-> Void` over `-> ()`",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1419,7 +1379,7 @@
         "key": "weak_delegate",
         "name": "Weak Delegate",
         "severity": "MINOR",
-        "description": "Delegates should be weak to avoid reference cycles.",
+        "description": "Delegates should be weak to avoid reference cycles",
         "type": "BUG",
         "debt": "10min"
     },
@@ -1427,7 +1387,7 @@
         "key": "xct_specific_matcher",
         "name": "XCTest Specific Matcher",
         "severity": "MINOR",
-        "description": "Prefer specific XCTest matchers over `XCTAssertEqual` and `XCTAssertNotEqual`",
+        "description": "Prefer specific XCTest matchers.",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1435,15 +1395,15 @@
         "key": "xctfail_message",
         "name": "XCTFail Message",
         "severity": "MINOR",
-        "description": "An XCTFail call should include a description of the assertion.",
+        "description": "An XCTFail call should include a description of the assertion",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "yoda_condition",
-        "name": "Yoda condition rule",
+        "name": "Yoda Condition",
         "severity": "MINOR",
-        "description": "The variable should be placed on the left, the constant on the right of a comparison operator.",
+        "description": "The constant literal should be placed on the right-hand side of the comparison operator",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1457,9 +1417,9 @@
     },
     {
         "key": "balanced_xctest_lifecycle",
-        "name": "Balanced XCTest life-cycle",
+        "name": "Balanced XCTest Life Cycle",
         "severity": "MINOR",
-        "description": "Test classes must implement balanced setUp and tearDown methods.",
+        "description": "Test classes must implement balanced setUp and tearDown methods",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1467,7 +1427,7 @@
         "key": "capture_variable",
         "name": "Capture Variable",
         "severity": "MAJOR",
-        "description": "Non-constant variables should not be listed in a closure's capture list to avoid confusion about closures capturing variables at creation time.",
+        "description": "Non-constant variables should not be listed in a closure's capture list to avoid confusion about closures capturing variables at creation time",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1475,7 +1435,7 @@
         "key": "comment_spacing",
         "name": "Comment Spacing",
         "severity": "INFO",
-        "description": "Prefer at least one space after slashes for comments.",
+        "description": "Prefer at least one space after slashes for comments",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1489,9 +1449,9 @@
     },
     {
         "key": "contains_over_range_nil_comparison",
-        "name": "Contains over range(of:) comparison to nil",
+        "name": "Contains over Range Comparison to Nil",
         "severity": "MINOR",
-        "description": "Prefer `contains` over `range(of:) != nil` and `range(of:) == nil`.",
+        "description": "Prefer `contains` over `range(of:) != nil` and `range(of:) == nil`",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1507,7 +1467,7 @@
         "key": "discouraged_none_name",
         "name": "Discouraged None Name",
         "severity": "MAJOR",
-        "description": "Discourages name cases/static members `none`, which can conflict with `Optional<T>.none`.",
+        "description": "Enum cases and static members named `none` are discouraged as they can conflict with `Optional<T>.none`.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1515,7 +1475,7 @@
         "key": "duplicated_key_in_dictionary_literal",
         "name": "Duplicated Key in Dictionary Literal",
         "severity": "BLOCKER",
-        "description": "Dictionary literals with duplicated keys will crash in runtime.",
+        "description": "Dictionary literals with duplicated keys will crash at runtime",
         "type": "BUG",
         "debt": "1min"
     },
@@ -1523,13 +1483,13 @@
         "key": "enum_case_associated_values_count",
         "name": "Enum Case Associated Values Count",
         "severity": "MAJOR",
-        "description": "Number of associated values in an enum case should be low",
+        "description": "The number of associated values in an enum case should be low.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "expiring_todo",
-        "name": "ExpiringTodo",
+        "name": "Expiring Todo",
         "severity": "CRITICAL",
         "description": "TODOs and FIXMEs should be resolved prior to their expiry date.",
         "type": "CODE_SMELL",
@@ -1537,17 +1497,17 @@
     },
     {
         "key": "file_name_no_space",
-        "name": "File Name No Space",
+        "name": "File Name no Space",
         "severity": "CRITICAL",
-        "description": "File name should not contain any whitespace.",
+        "description": "File name should not contain any whitespace",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
     {
         "key": "flatmap_over_map_reduce",
-        "name": "FlatMap over map and reduce",
+        "name": "Flat Map over Map Reduce",
         "severity": "MINOR",
-        "description": "Prefer `flatMap` over `map` followed by `reduce([], +)`.",
+        "description": "Prefer `flatMap` over `map` followed by `reduce([], +)`",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1555,7 +1515,7 @@
         "key": "ibinspectable_in_extension",
         "name": "IBInspectable in Extension",
         "severity": "CRITICAL",
-        "description": "Extensions shouldn't add @IBInspectable properties.",
+        "description": "Extensions shouldn't add @IBInspectable properties",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1563,7 +1523,7 @@
         "key": "inclusive_language",
         "name": "Inclusive Language",
         "severity": "CRITICAL",
-        "description": "Identifiers should use inclusive language that avoids discrimination against groups of people based on race, gender, or socioeconomic status",
+        "description": "Identifiers should use inclusive language that avoids discrimination against groups of people based on race, gender, or socioeconomic status.",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1587,7 +1547,7 @@
         "key": "optional_enum_case_matching",
         "name": "Optional Enum Case Match",
         "severity": "MAJOR",
-        "description": "Matching an enum case against an optional enum without '?' is supported on Swift 5.1 and above.",
+        "description": "Matching an enum case against an optional enum without '?' is supported on Swift 5.1 and above",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1595,7 +1555,7 @@
         "key": "orphaned_doc_comment",
         "name": "Orphaned Doc Comment",
         "severity": "INFO",
-        "description": "A doc comment should be attached to a declaration.",
+        "description": "A doc comment should be attached to a declaration",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1603,7 +1563,7 @@
         "key": "prefer_nimble",
         "name": "Prefer Nimble",
         "severity": "MINOR",
-        "description": "Prefer Nimble matchers over XCTAssert functions.",
+        "description": "Prefer Nimble matchers over XCTAssert functions",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1611,7 +1571,7 @@
         "key": "prefer_self_in_static_references",
         "name": "Prefer Self in Static References",
         "severity": "MAJOR",
-        "description": "Static references should be prefixed by `Self` instead of the class name.",
+        "description": "Use `Self` to refer to the surrounding type name",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1619,7 +1579,7 @@
         "key": "prefer_self_type_over_type_of_self",
         "name": "Prefer Self Type Over Type of Self",
         "severity": "MAJOR",
-        "description": "Prefer `Self` over `type(of: self)` when accessing properties or calling methods.",
+        "description": "Prefer `Self` over `type(of: self)` when accessing properties or calling methods",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1635,15 +1595,15 @@
         "key": "private_subject",
         "name": "Private Combine Subject",
         "severity": "MAJOR",
-        "description": "Combine Subject should be private.",
+        "description": "Combine Subject should be private",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
     {
         "key": "raw_value_for_camel_cased_codable_enum",
-        "name": "Raw Value For Camel Cased Codable Enum",
+        "name": "Raw Value for Camel Cased Codable Enum",
         "severity": "MINOR",
-        "description": "Camel cased cases of Codable String enums should have raw value.",
+        "description": "Camel cased cases of Codable String enums should have raw values",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1651,15 +1611,15 @@
         "key": "self_in_property_initialization",
         "name": "Self in Property Initialization",
         "severity": "MAJOR",
-        "description": "`self` refers to the unapplied `NSObject.self()` method, which is likely not expected. Make the variable `lazy` to be able to refer to the current instance or use `ClassName.self`.",
+        "description": "`self` refers to the unapplied `NSObject.self()` method, which is likely not expected; make the variable `lazy` to be able to refer to the current instance or use `ClassName.self`",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
     {
         "key": "test_case_accessibility",
-        "name": "Test case accessibility",
+        "name": "Test Case Accessibility",
         "severity": "MAJOR",
-        "description": "Test cases should only contain private non-test members.",
+        "description": "Test cases should only contain private non-test members",
         "type": "CODE_SMELL",
         "debt": "1min"
     },
@@ -1667,7 +1627,7 @@
         "key": "accessibility_label_for_image",
         "name": "Accessibility Label for Image",
         "severity": "CRITICAL",
-        "description": "All Images that provide context should have an accessibility label. Purely decorative images can be hidden from accessibility.",
+        "description": "Images that provide context should have an accessibility label or should be explicitly hidden from accessibility",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1683,7 +1643,7 @@
         "key": "return_value_from_void_function",
         "name": "Return Value from Void Function",
         "severity": "CRITICAL",
-        "description": "Returning values from Void functions should be avoided.",
+        "description": "Returning values from Void functions should be avoided",
         "type": "BUG",
         "debt": "5min"
     },
@@ -1691,7 +1651,7 @@
         "key": "typesafe_array_init",
         "name": "Type-safe Array Init",
         "severity": "MAJOR",
-        "description": "Prefer using `Array(seq)` over `seq.map { $0 }` to convert a sequence into an Array.",
+        "description": "Prefer using `Array(seq)` over `seq.map { $0 }` to convert a sequence into an Array",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1699,7 +1659,7 @@
         "key": "unavailable_condition",
         "name": "Unavailable Condition",
         "severity": "MINOR",
-        "description": "Use #unavailable instead of #available with an empty body.",
+        "description": "Use #unavailable/#available instead of #available/#unavailable with an empty body.",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1707,7 +1667,7 @@
         "key": "void_function_in_ternary",
         "name": "Void Function in Ternary",
         "severity": "MINOR",
-        "description": "Using ternary to call Void functions should be avoided.",
+        "description": "Using ternary to call Void functions should be avoided",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1715,7 +1675,7 @@
         "key": "accessibility_trait_for_button",
         "name": "Accessibility Trait for Button",
         "severity": "MINOR",
-        "description": "All views with tap gestures added should include the .isButton accessibility trait. If a tap opens an external link the .isLink trait should be used instead.",
+        "description": "All views with tap gestures added should include the .isButton or the .isLink accessibility traits",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1723,7 +1683,7 @@
         "key": "no_magic_numbers",
         "name": "No Magic Numbers",
         "severity": "MINOR",
-        "description": "Magic numbers should be replaced by named constants.",
+        "description": "Magic numbers should be replaced by named constants",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1731,7 +1691,7 @@
         "key": "ns_number_init_as_function_reference",
         "name": "NSNumber Init as Function Reference",
         "severity": "MAJOR",
-        "description": "Passing `NSNumber.init` or `NSDecimalNumber.init` as a function reference is dangerous as it can cause the wrong initializer to be used, causing crashes. Use `.init(value:)` instead.",
+        "description": "Passing `NSNumber.init` or `NSDecimalNumber.init` as a function reference is dangerous as it can cause the wrong initializer to be used, causing crashes; use `.init(value:)` instead",
         "type": "BUG",
         "debt": "5min"
     },
@@ -1755,7 +1715,7 @@
         "key": "blanket_disable_command",
         "name": "Blanket Disable Command",
         "severity": "MAJOR",
-        "description": "swiftlint:disable commands should be re-enabled before the end of the file",
+        "description": "`swiftlint:disable` commands should use `next`, `this` or `previous` to disable rules for a single line, or `swiftlint:enable` to re-enable the rules immediately after the violations to be ignored, instead of disabling the rule for the rest of the file.",
         "type": "BUG",
         "debt": "5min"
     },
@@ -1779,7 +1739,7 @@
         "key": "invalid_swiftlint_command",
         "name": "Invalid SwiftLint Command",
         "severity": "MINOR",
-        "description": "swiftlint command does not have a valid action or modifier",
+        "description": "swiftlint command is invalid",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1796,14 +1756,6 @@
         "name": "Period Spacing",
         "severity": "MINOR",
         "description": "Periods should not be followed by more than one space",
-        "type": "CODE_SMELL",
-        "debt": "5min"
-    },
-    {
-        "key": "redundant_self_in_closure",
-        "name": "Redundant Self in Closure",
-        "severity": "MAJOR",
-        "description": "Explicit use of 'self' is not required",
         "type": "CODE_SMELL",
         "debt": "5min"
     },
@@ -1860,6 +1812,238 @@
         "name": "Unneeded Overridden Functions",
         "severity": "MINOR",
         "description": "Remove overridden functions that don't do anything except call their super",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "async_without_await",
+        "name": "Async Without Await",
+        "severity": "MINOR",
+        "description": "Declaration should not be async if it doesn't use await",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "attribute_name_spacing",
+        "name": "Attribute Name Spacing",
+        "severity": "MINOR",
+        "description": "This rule prevents trailing spaces after attribute names, ensuring compatibility with Swift 6 where a space between an attribute name and the opening parenthesis results in a compilation error (e.g. `@MyPropertyWrapper ()`, `private (set)`).",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "contrasted_opening_brace",
+        "name": "Contrasted Opening Brace",
+        "severity": "MINOR",
+        "description": "The correct positioning of braces that introduce a block of code or member list is highly controversial. No matter which style is preferred, consistency is key. Apart from different tastes, the positioning of braces can also have a significant impact on the readability of the code, especially for visually impaired developers. This rule ensures that braces are on a separate line after the declaration to contrast the code block from the rest of the declaration. Comments between the declaration and the opening brace are respected. Check out the `opening_brace` rule for a different style.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "discouraged_default_parameter",
+        "name": "Discouraged Default Parameter",
+        "severity": "MINOR",
+        "description": "Default parameter values should not be used in functions with certain access levels.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "final_test_case",
+        "name": "Final Test Case",
+        "severity": "MINOR",
+        "description": "Test cases should be final",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "function_name_whitespace",
+        "name": "Function Name Whitespace",
+        "severity": "MINOR",
+        "description": "There should be consistent whitespace before and after function names and generic parameters.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "implicit_optional_initialization",
+        "name": "Implicit Optional Initialization",
+        "severity": "MINOR",
+        "description": "Optionals should be consistently initialized, either with `= nil` or without.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "incompatible_concurrency_annotation",
+        "name": "Incompatible Concurrency Annotation",
+        "severity": "MINOR",
+        "description": "Declaration should be @preconcurrency to maintain compatibility with Swift 5",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "invisible_character",
+        "name": "Invisible Character",
+        "severity": "MINOR",
+        "description": "Disallows invisible characters like zero-width space (U+200B), zero-width non-joiner (U+200C), and FEFF formatting character (U+FEFF) in string literals as they can cause hard-to-debug issues.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "legacy_swiftui_aspect_ratio",
+        "name": "Legacy SwiftUI Aspect Ratio",
+        "severity": "MINOR",
+        "description": "Prefer `scaledToFit()` or `scaledToFill()` over `aspectRatio(contentMode:)` with a constant content mode",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "legacy_uigraphics_function",
+        "name": "Legacy UIGraphics Function",
+        "severity": "MINOR",
+        "description": "Prefer using `UIGraphicsImageRenderer` over legacy functions",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "multiline_call_arguments",
+        "name": "Multiline Call Arguments",
+        "severity": "MINOR",
+        "description": "Enforces one-argument-per-line for multi-line calls and requires a newline after commas when arguments are split across lines;",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "no_empty_block",
+        "name": "No Empty Block",
+        "severity": "MINOR",
+        "description": "Code blocks should contain at least one statement or comment",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "non_optional_string_data_conversion",
+        "name": "Non-optional String -> Data Conversion",
+        "severity": "MINOR",
+        "description": "Prefer non-optional `Data(_:)` initializer when converting `String` to `Data`",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "one_declaration_per_file",
+        "name": "One Declaration per File",
+        "severity": "MINOR",
+        "description": "Only a single declaration is allowed in a file",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "optional_data_string_conversion",
+        "name": "Optional Data -> String Conversion",
+        "severity": "MINOR",
+        "description": "Prefer failable `String(bytes:encoding:)` initializer when converting `Data` to `String`",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "prefer_asset_symbols",
+        "name": "Prefer Asset Symbols",
+        "severity": "MINOR",
+        "description": "Prefer using asset symbols over string-based image initialization",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "prefer_condition_list",
+        "name": "Prefer Condition List",
+        "severity": "MINOR",
+        "description": "Prefer a condition list over chaining conditions with '&&'",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "prefer_key_path",
+        "name": "Prefer Key Path",
+        "severity": "MINOR",
+        "description": "Use a key path argument instead of a closure with property access",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "prefer_type_checking",
+        "name": "Prefer Type Checking",
+        "severity": "MINOR",
+        "description": "Prefer `a is X` to `a as? X != nil`",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "redundant_final",
+        "name": "Redundant Final",
+        "severity": "MINOR",
+        "description": "`final` is redundant",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "redundant_self",
+        "name": "Redundant Self",
+        "severity": "MINOR",
+        "description": "Explicit use of 'self' is not required",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "redundant_sendable",
+        "name": "Redundant Sendable",
+        "severity": "MINOR",
+        "description": "Sendable conformance is redundant on an actor-isolated type",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "shorthand_argument",
+        "name": "Shorthand Argument",
+        "severity": "MINOR",
+        "description": "Shorthand arguments like `$0`, `$1`, etc. in closures can be confusing. Avoid using them too far away from the beginning of the closure. Optionally, while usage of a single shorthand argument is okay, more than one or complex ones with field accesses might increase the risk of obfuscation.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "static_over_final_class",
+        "name": "Static Over Final Class",
+        "severity": "MINOR",
+        "description": "Prefer `static` over `class` when the declaration is not allowed to be overridden in child classes due to its context being final. Likewise, the compiler complains about `open` being used in `final` classes.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "unneeded_escaping",
+        "name": "Unneeded Escaping",
+        "severity": "MINOR",
+        "description": "The `@escaping` attribute should only be used when the closure actually escapes.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "unneeded_throws_rethrows",
+        "name": "Unneeded (Re)Throws Keyword",
+        "severity": "MINOR",
+        "description": "Non-throwing functions/properties/closures should not be marked as `throws` or `rethrows`.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "unused_parameter",
+        "name": "Unused Parameter",
+        "severity": "MINOR",
+        "description": "Other than unused local variable declarations, unused function/initializer/subscript parameters are not marked by the Swift compiler. Since unused parameters are code smells, they should either be removed or replaced/shadowed by a wildcard '_' to indicate that they are being deliberately disregarded.",
+        "type": "CODE_SMELL",
+        "debt": "5min"
+    },
+    {
+        "key": "variable_shadowing",
+        "name": "Variable Shadowing",
+        "severity": "MINOR",
+        "description": "Do not shadow variables declared in outer scopes",
         "type": "CODE_SMELL",
         "debt": "5min"
     }
