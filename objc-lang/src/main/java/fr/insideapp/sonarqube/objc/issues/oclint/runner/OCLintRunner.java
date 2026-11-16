@@ -54,6 +54,18 @@ public final class OCLintRunner extends OCLintRunnable {
     }
 
     @Override
+    protected File workingDirectory() {
+        return fileSystem.baseDir();
+    }
+
+    @Override
+    protected Integer[] exitCodes() {
+        // 5 = VIOLATIONS_EXCEED_THRESHOLD: OCLint still printed the report, it only
+        // flags that its default priority thresholds were exceeded
+        return new Integer[]{0, 5};
+    }
+
+    @Override
     protected String[] arguments() {
         List<String> options = new ArrayList<>();
         options.addAll(sources());

@@ -20,6 +20,7 @@ package fr.insideapp.sonarqube.apple.mobsfscan.runner;
 import fr.insideapp.sonarqube.apple.commons.SonarProjectConfiguration;
 import org.sonar.api.scanner.ScannerSide;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,11 @@ public final class MobSFScanRunner extends MobSFScanRunnable {
         options.add("--json");
         options.addAll(sonarProjectConfiguration.sources());
         return options.stream().toArray(String[]::new);
+    }
+
+    @Override
+    protected File workingDirectory() {
+        return sonarProjectConfiguration.baseDir().orElse(null);
     }
 
     @Override

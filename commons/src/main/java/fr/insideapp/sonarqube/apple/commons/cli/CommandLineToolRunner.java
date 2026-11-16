@@ -17,10 +17,14 @@
  */
 package fr.insideapp.sonarqube.apple.commons.cli;
 
+import org.buildobjects.process.ExternalProcessFailureException;
 import org.buildobjects.process.ProcBuilder;
+import org.buildobjects.process.StartupException;
+import org.buildobjects.process.TimeoutException;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
+import java.io.File;
 import java.util.Set;
 
 public abstract class CommandLineToolRunner {
@@ -38,11 +42,48 @@ public abstract class CommandLineToolRunner {
         return new Integer[]{DEFAULT_COMMAND_EXIT_CODE};
     }
 
+    /**
+     * Directory the tool runs in. Tools that receive paths relative to the project
+     * (sonar.sources, Periphery settings) must run in the project base directory.
+     * @return null to inherit the scanner's working directory
+     */
+    protected File workingDirectory() {
+        return null;
+    }
+
+    /**
+     * Logs why the tool could not produce output, in a way that is actionable without --debug.
+     */
+    protected final void logFailure(Exception e) {
+        if (e instanceof StartupException) {
+            LOGGER.error("Could not start '{}'. Is it installed and on the PATH of the scanner?", command);
+        } else if (e instanceof TimeoutException) {
+            LOGGER.error("'{}' did not finish within {} minutes and was stopped.", command, COMMAND_TIMEOUT / 60_000);
+        } else if (e instanceof ExternalProcessFailureException failure) {
+            LOGGER.error("'{}' exited with code {}: {}", command, failure.getExitValue(), abbreviate(failure.getStderr()));
+        } else {
+            LOGGER.error("Running '{}' failed: {}", command, e.getMessage());
+        }
+        LOGGER.debug("'{}' failure details", command, e);
+    }
+
+    private static String abbreviate(String text) {
+        if (text == null) {
+            return "";
+        }
+        String trimmed = text.strip();
+        return trimmed.length() > 500 ? trimmed.substring(0, 500) + "..." : trimmed;
+    }
+
     private ProcBuilder build(String[] arguments) {
         ProcBuilder builtCommand = new ProcBuilder(command)
                 .withArgs(arguments)
                 .withTimeoutMillis(COMMAND_TIMEOUT)
                 .withExpectedExitStatuses(Set.of(exitCodes()));
+        File workingDirectory = workingDirectory();
+        if (workingDirectory != null) {
+            builtCommand.withWorkingDirectory(workingDirectory);
+        }
         LOGGER.debug("Command that will be executed: {}", builtCommand.getCommandLine());
         return builtCommand;
     }

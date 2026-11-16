@@ -17,15 +17,12 @@
  */
 package fr.insideapp.sonarqube.apple.commons.cli;
 
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MultiCommandLineToolRunner extends CommandLineToolRunner {
 
-    private static final Logger LOGGER = Loggers.get(MultiCommandLineToolRunner.class);
 
     protected MultiCommandLineToolRunner(String command) {
         super(command);
@@ -37,8 +34,7 @@ public abstract class MultiCommandLineToolRunner extends CommandLineToolRunner {
             try {
                 outputs.add(execute(argument));
             } catch (Exception e) {
-                LOGGER.error("Running failed. Run in verbose to get more information.");
-                LOGGER.debug("{}", e);
+                logFailure(e);
             }
         }
         return outputs;

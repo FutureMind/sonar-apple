@@ -32,9 +32,7 @@ public final class XcodeCoverageReadRunner extends XcodeCoverageReadRunnable {
         return new String[]{
                 "xccov", "view",
                 "--archive", "--json",
-                resultBundle.getAbsolutePath(),
-                "1>&2", // redirect stdout to stderr
-                "2>/dev/null" // redirect stderr to void
+                resultBundle.getAbsolutePath()
         };
     }
 

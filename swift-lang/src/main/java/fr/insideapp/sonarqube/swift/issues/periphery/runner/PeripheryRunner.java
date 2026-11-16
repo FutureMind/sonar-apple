@@ -21,6 +21,8 @@ import fr.insideapp.sonarqube.swift.issues.periphery.PeripheryExtensionProvider;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.scanner.ScannerSide;
 
+import fr.insideapp.sonarqube.apple.commons.SonarProjectConfiguration;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +41,11 @@ public final class PeripheryRunner extends PeripheryRunnable {
         super("periphery");
         this.configuration = configuration;
         this.peripheryExtensionProvider = peripheryExtensionProvider;
+    }
+
+    @Override
+    protected File workingDirectory() {
+        return configuration.get(SonarProjectConfiguration.PROJECT_BASE_DIR_KEY).map(File::new).orElse(null);
     }
 
     @Override
