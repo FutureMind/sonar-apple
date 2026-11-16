@@ -22,7 +22,6 @@ import fr.insideapp.sonarqube.swift.issues.swiftlint.mapper.SwiftLintReportMappe
 import fr.insideapp.sonarqube.swift.issues.swiftlint.parser.SwiftLintReportParser;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.runner.SwiftLintRunner;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -39,7 +38,7 @@ public final class SwiftLintExtensionProvider implements ExtensionProvider {
             .builder(REPORT_PATHS_KEY)
             .name("SwiftLint report paths")
             .description("Comma-separated paths to pre-generated SwiftLint JSON reports. When set, the sensor imports these instead of running the swiftlint binary.")
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(SUBCATEGORY)
             .build();

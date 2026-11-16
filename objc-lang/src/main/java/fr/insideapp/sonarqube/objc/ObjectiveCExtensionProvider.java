@@ -24,7 +24,6 @@ import fr.insideapp.sonarqube.objc.antlr.ObjectiveCHighlighterVisitor;
 import fr.insideapp.sonarqube.objc.antlr.ObjectiveCSourceLinesVisitor;
 import fr.insideapp.sonarqube.objc.issues.ObjectiveCProfile;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public class ObjectiveCExtensionProvider implements ExtensionProvider {
         .multiValues(true)
         .category(APPLE_CATEGORY)
         .subCategory("Objective-C")
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
         .defaultValue(ObjectiveC.FILE_SUFFIXES.stream().collect(Collectors.joining(",")))
         .build();
 

@@ -25,7 +25,6 @@ import fr.insideapp.sonarqube.apple.xcode.runner.XcodeResultReadRunner;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.io.File;
@@ -42,7 +41,7 @@ public class XcodeResultExtensionProvider implements ExtensionProvider {
             .name("Xcode Result Bundle path")
             .description("Path to Xcode Result Bundle file. The path is relative to the project base directory.")
             .defaultValue(DEFAULT_RESULT_BUNDLE_PATH)
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .build();
 

@@ -19,8 +19,8 @@ package fr.insideapp.sonarqube.apple.commons.report;
 
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 public final class ReportFiles {
 
-    private static final Logger LOGGER = Loggers.get(ReportFiles.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportFiles.class);
 
     private ReportFiles() {
     }

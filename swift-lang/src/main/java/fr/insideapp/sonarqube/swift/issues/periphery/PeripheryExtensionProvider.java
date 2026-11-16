@@ -24,7 +24,6 @@ import fr.insideapp.sonarqube.swift.issues.periphery.runner.PeripheryRunner;
 import org.sonar.api.PropertyType;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
             .builder(INDEX_STORE_PATH_KEY)
             .name("Index Store folder path")
             .description("Path to Index Store folder.")
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(CATEGORY)
             .build();
@@ -51,7 +50,7 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
             .builder(PROJECT_PATH_KEY)
             .name("Project or workspace path")
             .description("Path to the Xcode project or workspace used by Periphery.")
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(CATEGORY)
             .build();
@@ -60,7 +59,7 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
             .name("Schemes")
             .description("Xcode schemes used by Periphery to identify the targets included in the Index Store.")
             .multiValues(true)
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(CATEGORY)
             .build();
@@ -72,7 +71,7 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
             .description("Disables the Periphery (dead code) sensor. Useful when Periphery is run outside SonarQube, or to avoid failures from a stale Index Store.")
             .defaultValue("false")
             .type(PropertyType.BOOLEAN)
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(CATEGORY)
             .build();
@@ -83,7 +82,7 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
             .builder(REPORT_PATHS_KEY)
             .name("Periphery report paths")
             .description("Comma-separated paths to pre-generated Periphery JSON reports. When set, the sensor imports these instead of running the periphery binary.")
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(CATEGORY)
             .build();

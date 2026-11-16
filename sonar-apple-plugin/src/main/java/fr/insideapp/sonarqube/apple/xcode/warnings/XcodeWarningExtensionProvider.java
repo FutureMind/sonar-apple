@@ -25,7 +25,6 @@ import fr.insideapp.sonarqube.apple.xcode.warnings.splitter.XcodeWarningsReportI
 import fr.insideapp.sonarqube.objc.issues.warnings.XcodeWarningObjectiveCRulesDefinition;
 import fr.insideapp.sonarqube.swift.issues.warnings.XcodeWarningSwiftRulesDefinition;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public final class XcodeWarningExtensionProvider implements ExtensionProvider {
             .builder(REPORT_PATHS_KEY)
             .name("Xcode Warnings report paths")
             .description("Comma-separated paths to pre-generated Xcode xcresulttool JSON reports. When set, the sensor imports these instead of running xcresulttool.")
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(CATEGORY)
             .build();

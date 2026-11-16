@@ -23,7 +23,6 @@ import fr.insideapp.sonarqube.apple.xcode.coverage.parser.XcodeCodeCoverageParse
 import fr.insideapp.sonarqube.apple.xcode.coverage.recorder.XcodeCoverageRecorder;
 import fr.insideapp.sonarqube.apple.xcode.coverage.runner.XcodeCoverageReadRunner;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class XcodeCoverageExtensionProvider implements ExtensionProvider {
             .builder(REPORT_PATHS_KEY)
             .name("Xcode coverage report paths")
             .description("Comma-separated paths to pre-extracted xccov JSON reports. When set, the sensor imports these instead of running xcrun xccov.")
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory("Coverage")
             .build();

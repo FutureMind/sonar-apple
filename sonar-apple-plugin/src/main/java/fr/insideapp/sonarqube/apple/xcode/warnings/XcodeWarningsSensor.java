@@ -35,8 +35,8 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ import java.util.Map;
 
 public class XcodeWarningsSensor implements Sensor {
 
-    private static final Logger LOGGER = Loggers.get(XcodeWarningsSensor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(XcodeWarningsSensor.class);
 
     private final Swift swift;
     private final ObjectiveC objectiveC;

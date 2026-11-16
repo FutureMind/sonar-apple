@@ -27,7 +27,6 @@ import fr.insideapp.sonarqube.objc.issues.oclint.writer.OCLintJSONCompilationDat
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.io.File;
@@ -44,7 +43,7 @@ public class OCLintExtensionProvider implements ExtensionProvider {
             .name("JSON Compilation Database path")
             .description("Path to JSON Compilation Database folder. The path may be either absolute or relative to the project base directory.")
             .defaultValue(DEFAULT_JSON_COMPILATION_DATABASE_PATH)
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory("OCLint")
             .build();
