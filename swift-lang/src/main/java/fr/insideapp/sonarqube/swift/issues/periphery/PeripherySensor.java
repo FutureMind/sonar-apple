@@ -24,17 +24,23 @@ import fr.insideapp.sonarqube.swift.issues.periphery.mapper.PeripheryReportMappa
 import fr.insideapp.sonarqube.swift.issues.periphery.models.PeripheryIssue;
 import fr.insideapp.sonarqube.swift.issues.periphery.parser.PeripheryReportParsable;
 import fr.insideapp.sonarqube.swift.issues.periphery.runner.PeripheryRunnable;
+import fr.insideapp.sonarqube.apple.commons.report.ReportFiles;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.config.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class PeripherySensor implements Sensor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PeripherySensor.class);
 
     private final Swift swift;
     private final PeripheryRulesDefinition rulesDefinition;
@@ -67,11 +73,23 @@ public class PeripherySensor implements Sensor {
 
     @Override
     public void execute(SensorContext sensorContext) {
-        String output = runner.run();
-        List<PeripheryIssue> issues = parser
-                .parse(output)
-                .stream()
-                .filter(issue -> Objects.nonNull(issue.location)) // remove null values
+        if (sensorContext.config().getBoolean(PeripheryExtensionProvider.SKIP_KEY).orElse(false)) {
+            LOGGER.info("Skipping Periphery analysis ({}=true).", PeripheryExtensionProvider.SKIP_KEY);
+            return;
+        }
+        Configuration config = sensorContext.config();
+
+        List<String> outputs;
+        if (ReportFiles.configured(config, PeripheryExtensionProvider.REPORT_PATHS_KEY)) {
+            outputs = ReportFiles.read(sensorContext, PeripheryExtensionProvider.REPORT_PATHS_KEY, "Periphery");
+        } else {
+            outputs = List.of(runner.run());
+        }
+
+        List<PeripheryIssue> issues = outputs.stream()
+                .map(parser::parse)
+                .flatMap(List::stream)
+                .filter(issue -> Objects.nonNull(issue.location))
                 .toList();
         List<ReportIssue> reportIssues = new ArrayList<>(mapper.map(issues));
         ReportIssueRecorder issueRecorder = new ReportIssueRecorder();

@@ -336,11 +336,12 @@ public class SwiftSupport {
     }
 
     public static boolean isLeftOperatorWS(Token t) {
-        return leftWS.get(t.getType());
+        return t.getType() >= 0 && leftWS.get(t.getType());
     }
 
     public static boolean isRightOperatorWS(Token t) {
-        return rightWS.get(t.getType()) || t.getType() == Token.EOF;
+        // EOF has type -1: check it before BitSet.get, which throws on negative indexes
+        return t.getType() == Token.EOF || rightWS.get(t.getType());
     }
 
     public static boolean isSeparatedStatement(TokenStream tokens, int indexOfPreviousStatement) {

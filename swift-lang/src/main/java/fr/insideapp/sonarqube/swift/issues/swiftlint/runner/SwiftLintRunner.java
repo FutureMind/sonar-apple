@@ -20,6 +20,7 @@ package fr.insideapp.sonarqube.swift.issues.swiftlint.runner;
 import fr.insideapp.sonarqube.apple.commons.SonarProjectConfiguration;
 import org.sonar.api.scanner.ScannerSide;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,11 @@ public final class SwiftLintRunner extends SwiftLintRunnable {
             options.add(new String[]{"lint", "--quiet", "--reporter", "json", source});
         }
         return options;
+    }
+
+    @Override
+    protected File workingDirectory() {
+        return configuration.baseDir().orElse(null);
     }
 
     @Override

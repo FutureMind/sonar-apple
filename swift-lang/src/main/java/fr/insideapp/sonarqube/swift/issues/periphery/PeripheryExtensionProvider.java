@@ -21,9 +21,9 @@ import fr.insideapp.sonarqube.apple.commons.ExtensionProvider;
 import fr.insideapp.sonarqube.swift.issues.periphery.mapper.PeripheryReportMapper;
 import fr.insideapp.sonarqube.swift.issues.periphery.parser.PeripheryReportParser;
 import fr.insideapp.sonarqube.swift.issues.periphery.runner.PeripheryRunner;
+import org.sonar.api.PropertyType;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -36,11 +36,53 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
     private static final String CATEGORY = "Periphery";
 
     private static final String INDEX_STORE_PATH_KEY = "sonar.apple.periphery.indexStorePath";
+    private static final String PROJECT_PATH_KEY = "sonar.apple.periphery.projectPath";
+    private static final String SCHEMES_KEY = "sonar.apple.periphery.schemes";
     private static final PropertyDefinition INDEX_STORE_PATH_PROPERTY = PropertyDefinition
             .builder(INDEX_STORE_PATH_KEY)
             .name("Index Store folder path")
             .description("Path to Index Store folder.")
-            .onQualifiers(Qualifiers.PROJECT)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
+            .category(APPLE_CATEGORY)
+            .subCategory(CATEGORY)
+            .build();
+    private static final PropertyDefinition PROJECT_PATH_PROPERTY = PropertyDefinition
+            .builder(PROJECT_PATH_KEY)
+            .name("Project or workspace path")
+            .description("Path to the Xcode project or workspace used by Periphery.")
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
+            .category(APPLE_CATEGORY)
+            .subCategory(CATEGORY)
+            .build();
+    private static final PropertyDefinition SCHEMES_PROPERTY = PropertyDefinition
+            .builder(SCHEMES_KEY)
+            .name("Schemes")
+            .description("Xcode schemes used by Periphery to identify the targets included in the Index Store.")
+            .multiValues(true)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
+            .category(APPLE_CATEGORY)
+            .subCategory(CATEGORY)
+            .build();
+
+    public static final String SKIP_KEY = "sonar.apple.periphery.skip";
+    private static final PropertyDefinition SKIP_PROPERTY = PropertyDefinition
+            .builder(SKIP_KEY)
+            .name("Skip Periphery analysis")
+            .description("Disables the Periphery (dead code) sensor. Useful when Periphery is run outside SonarQube, or to avoid failures from a stale Index Store.")
+            .defaultValue("false")
+            .type(PropertyType.BOOLEAN)
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
+            .category(APPLE_CATEGORY)
+            .subCategory(CATEGORY)
+            .build();
+
+    public static final String REPORT_PATHS_KEY = "sonar.apple.periphery.reportPaths";
+
+    private static final PropertyDefinition REPORT_PATHS_PROPERTY = PropertyDefinition
+            .builder(REPORT_PATHS_KEY)
+            .name("Periphery report paths")
+            .description("Comma-separated paths to pre-generated Periphery JSON reports. When set, the sensor imports these instead of running the periphery binary.")
+            .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
             .category(APPLE_CATEGORY)
             .subCategory(CATEGORY)
             .build();
@@ -48,6 +90,10 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
     public List<Object> extensions() {
         return Arrays.asList(
                 INDEX_STORE_PATH_PROPERTY,
+                SKIP_PROPERTY,
+                PROJECT_PATH_PROPERTY,
+                SCHEMES_PROPERTY,
+                REPORT_PATHS_PROPERTY,
                 PeripheryRulesDefinition.class,
                 PeripheryRunner.class,
                 PeripheryReportParser.class,
@@ -59,6 +105,21 @@ public class PeripheryExtensionProvider implements ExtensionProvider {
     public Optional<String> indexStorePath(Configuration configuration) {
         return configuration
                 .get(INDEX_STORE_PATH_KEY);
+    }
+
+    public boolean skip(Configuration configuration) {
+        return configuration
+                .getBoolean(SKIP_KEY)
+                .orElse(false);
+    }
+
+    public Optional<String> projectPath(Configuration configuration) {
+        return configuration
+                .get(PROJECT_PATH_KEY);
+    }
+
+    public List<String> schemes(Configuration configuration) {
+        return Arrays.asList(configuration.getStringArray(SCHEMES_KEY));
     }
 
 }

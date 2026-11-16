@@ -42,8 +42,7 @@ public final class XcodeCoverageReadRunnerTest {
                 "xccov",
                 "view",
                 "--archive", "--json",
-                "/xcode",
-                "1>&2", "2>/dev/null"
+                "/xcode"
         });
     }
 

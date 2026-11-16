@@ -33,7 +33,7 @@ public final class XcodeCoverageExtensionProviderTest {
 
     @Test
     public void extensions() {
-        assertThat(provider.extensions()).hasSize(5);
+        assertThat(provider.extensions()).hasSize(6);
     }
 
 }

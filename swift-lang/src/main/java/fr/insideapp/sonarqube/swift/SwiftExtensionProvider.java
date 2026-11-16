@@ -24,7 +24,6 @@ import fr.insideapp.sonarqube.swift.antlr.SwiftHighlighterVisitor;
 import fr.insideapp.sonarqube.swift.antlr.SwiftSourceLinesVisitor;
 import fr.insideapp.sonarqube.swift.issues.SwiftProfile;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scanner.ScannerSide;
 
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public class SwiftExtensionProvider implements ExtensionProvider {
         .multiValues(true)
         .category(APPLE_CATEGORY)
         .subCategory("Swift")
-        .onQualifiers(Qualifiers.PROJECT)
+        .onConfigScopes(PropertyDefinition.ConfigScope.PROJECT)
         .defaultValue(Swift.FILE_SUFFIXES.stream().collect(Collectors.joining(",")))
         .build();
 

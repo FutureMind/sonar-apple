@@ -30,9 +30,13 @@ import fr.insideapp.sonarqube.apple.xcode.warnings.parser.models.WarningSummary;
 import fr.insideapp.sonarqube.apple.xcode.warnings.splitter.XcodeWarningsReportIssueSplittable;
 import fr.insideapp.sonarqube.objc.ObjectiveC;
 import fr.insideapp.sonarqube.swift.Swift;
+import fr.insideapp.sonarqube.apple.commons.report.ReportFiles;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.config.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,6 +44,8 @@ import java.util.List;
 import java.util.Map;
 
 public class XcodeWarningsSensor implements Sensor {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(XcodeWarningsSensor.class);
 
     private final Swift swift;
     private final ObjectiveC objectiveC;
@@ -79,13 +85,30 @@ public class XcodeWarningsSensor implements Sensor {
 
     @Override
     public void execute(SensorContext sensorContext) {
-        final File resultBundle = extensionProvider.resultBundle(sensorContext.fileSystem(), sensorContext.config());
-        final String xcodeResultReadOutput = runner.run(resultBundle);
-        final List<WarningSummary> warningSummaries = parser.parse(xcodeResultReadOutput);
+        Configuration config = sensorContext.config();
+
+        final List<WarningSummary> warningSummaries;
+        if (ReportFiles.configured(config, XcodeWarningExtensionProvider.REPORT_PATHS_KEY)) {
+            warningSummaries = ReportFiles.read(sensorContext, XcodeWarningExtensionProvider.REPORT_PATHS_KEY, "Xcode warnings").stream()
+                    .map(parser::parse)
+                    .flatMap(List::stream)
+                    .toList();
+        } else {
+            final File resultBundle = extensionProvider.resultBundle(sensorContext.fileSystem(), config);
+            if (!resultBundle.exists()) {
+                // without this the sensor ran xcresulttool on a missing bundle on every scan
+                LOGGER.info("No Xcode result bundle at {}, skipping Xcode warnings", resultBundle);
+                return;
+            }
+            final String xcodeResultReadOutput = runner.run(resultBundle);
+            warningSummaries = parser.parse(xcodeResultReadOutput);
+        }
+
         List<XcodeWarning> xcodeWarnings = new ArrayList<>(converter.map(warningSummaries));
         List<ReportIssue> reportIssues = new ArrayList<>(mapper.map(xcodeWarnings));
         Map<XcodeWarningRulesDefinition, List<ReportIssue>> splitReportIssues = splitter.split(reportIssues, sensorContext.activeRules());
         ReportIssueRecorder issueRecorder = new ReportIssueRecorder();
         splitReportIssues.forEach((rulesDefinition, splitIssues) -> issueRecorder.recordIssues(splitIssues, rulesDefinition.getRepositoryKey(), sensorContext));
     }
+
 }

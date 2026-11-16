@@ -22,8 +22,8 @@ import fr.insideapp.sonarqube.objc.ObjectiveC;
 import fr.insideapp.sonarqube.objc.issues.oclint.OCLintExtensionProvider;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.scanner.ScannerSide;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.List;
 @ScannerSide
 public final class OCLintRunner extends OCLintRunnable {
 
-    private static final Logger LOGGER = Loggers.get(OCLintRunner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OCLintRunner.class);
 
     private final SonarProjectConfiguration sonarProjectConfiguration;
     private final OCLintExtensionProvider ocLintExtensionProvider;
@@ -51,6 +51,18 @@ public final class OCLintRunner extends OCLintRunnable {
         this.ocLintExtensionProvider = ocLintExtensionProvider;
         this.objectiveC = objectiveC;
         this.fileSystem = fileSystem;
+    }
+
+    @Override
+    protected File workingDirectory() {
+        return fileSystem.baseDir();
+    }
+
+    @Override
+    protected Integer[] exitCodes() {
+        // 5 = VIOLATIONS_EXCEED_THRESHOLD: OCLint still printed the report, it only
+        // flags that its default priority thresholds were exceeded
+        return new Integer[]{0, 5};
     }
 
     @Override

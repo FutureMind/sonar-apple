@@ -24,11 +24,13 @@ import fr.insideapp.sonarqube.swift.issues.swiftlint.mapper.SwiftLintReportMappa
 import fr.insideapp.sonarqube.swift.issues.swiftlint.models.SwiftLintIssue;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.parser.SwiftLintReportParsable;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.runner.SwiftLintRunnable;
+import fr.insideapp.sonarqube.apple.commons.report.ReportFiles;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.config.Configuration;
 
 import java.util.List;
 
@@ -65,7 +67,15 @@ public class SwiftLintSensor implements Sensor {
 
     @Override
     public void execute(SensorContext sensorContext) {
-        List<String> outputs = runner.run();
+        Configuration config = sensorContext.config();
+
+        List<String> outputs;
+        if (ReportFiles.configured(config, SwiftLintExtensionProvider.REPORT_PATHS_KEY)) {
+            outputs = ReportFiles.read(sensorContext, SwiftLintExtensionProvider.REPORT_PATHS_KEY, "SwiftLint");
+        } else {
+            outputs = runner.run();
+        }
+
         List<SwiftLintIssue> issues = outputs.stream()
                 .map(parser::parse)
                 .flatMap(List::stream)

@@ -27,10 +27,12 @@ import fr.insideapp.sonarqube.apple.mobsfscan.runner.MobSFScanRunnable;
 import fr.insideapp.sonarqube.apple.mobsfscan.splitter.MobSFScanReportIssueSplittable;
 import fr.insideapp.sonarqube.objc.ObjectiveC;
 import fr.insideapp.sonarqube.swift.Swift;
+import fr.insideapp.sonarqube.apple.commons.report.ReportFiles;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.config.Configuration;
 
 import java.util.List;
 import java.util.Map;
@@ -71,8 +73,19 @@ public class MobSFScanSensor implements Sensor {
 
     @Override
     public void execute(SensorContext sensorContext) {
-        String output = runner.run();
-        List<MobSFScanIssue> issues = parser.parse(output);
+        Configuration config = sensorContext.config();
+
+        final List<MobSFScanIssue> issues;
+        if (ReportFiles.configured(config, MobSFScanExtensionProvider.REPORT_PATHS_KEY)) {
+            issues = ReportFiles.read(sensorContext, MobSFScanExtensionProvider.REPORT_PATHS_KEY, "MobSFScan").stream()
+                    .map(parser::parse)
+                    .flatMap(List::stream)
+                    .toList();
+        } else {
+            String output = runner.run();
+            issues = parser.parse(output);
+        }
+
         List<ReportIssue> reportIssues = mapper.map(issues).stream().toList();
         Map<MobSFScanRulesDefinition, List<ReportIssue>> splitReportIssues = splitter.split(reportIssues, sensorContext.activeRules());
         ReportIssueRecorder issueRecorder = new ReportIssueRecorder();

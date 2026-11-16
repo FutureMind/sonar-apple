@@ -34,7 +34,7 @@
 
     <properties>
         <!-- versions -->
-        <sonar-maven-plugin.version>1.23.0.740</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>1.25.1.3002</sonar-maven-plugin.version>
         <maven-antrun.version>3.1.0</maven-antrun.version>
     </properties>
 
@@ -69,6 +69,7 @@
                     <pluginName>Swift/Objective-C Code Quality and Security</pluginName>
                     <pluginApiMinVersion>${sonar.api.version}</pluginApiMinVersion>
                     <jreMinVersion>${jre.min.version}</jreMinVersion>
+                    <requiredForLanguages>swift,objc</requiredForLanguages>
                 </configuration>
             </plugin>
 

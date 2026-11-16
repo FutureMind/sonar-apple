@@ -42,7 +42,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 public final class PeripherySensorTest {
@@ -133,6 +133,60 @@ public final class PeripherySensorTest {
         assertThat(issue1.primaryLocation().message()).isNull();
         assertThat(issue1.primaryLocation().inputComponent().key()).isEqualTo(":Greeting.swift");
         assertThat(issue1.primaryLocation().textRange().start().line()).isEqualTo(5);
+    }
+
+    @Test
+    public void executeWithReportPaths() {
+        // prepare — point at the oneIssue.json test fixture
+        context.settings().setProperty(
+                PeripheryExtensionProvider.REPORT_PATHS_KEY,
+                "oneIssue.json"
+        );
+        DefaultInputFile testFile = new TestInputFileBuilder("", "Greeting.swift")
+                .setModuleBaseDir(Paths.get(BASE_DIR))
+                .setLanguage(swift.getKey())
+                .setLines(10)
+                .setOriginalLineEndOffsets(new int[10])
+                .setOriginalLineStartOffsets(new int[10])
+                .build();
+        context.fileSystem().add(testFile);
+
+        when(parser.parse(anyString())).thenReturn(List.of());
+        ReportIssue reportIssue = new ReportIssue(
+                "unused",
+                null,
+                testFile.path().toString(),
+                5
+        );
+        when(mapper.map(any())).thenReturn(Set.of(reportIssue));
+        when(rulesDefinition.getRepositoryKey()).thenReturn("key");
+
+        // test
+        sensor.execute(context);
+
+        // assert — runner should NOT be called
+        verify(runner, never()).run();
+        List<Issue> issues = new ArrayList<>(context.allIssues());
+        assertThat(issues).hasSize(1);
+        assertThat(issues.get(0).ruleKey().rule()).isEqualTo("unused");
+    }
+
+    @Test
+    public void executeWithReportPaths_fileNotFound() {
+        // prepare — point at a non-existent file
+        context.settings().setProperty(
+                PeripheryExtensionProvider.REPORT_PATHS_KEY,
+                "does-not-exist.json"
+        );
+        when(mapper.map(any())).thenReturn(Set.of());
+        when(rulesDefinition.getRepositoryKey()).thenReturn("key");
+
+        // test — should not crash
+        sensor.execute(context);
+
+        // assert
+        verify(runner, never()).run();
+        assertThat(context.allIssues()).isEmpty();
     }
 
 }

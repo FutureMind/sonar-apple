@@ -17,6 +17,7 @@
  */
 package fr.insideapp.sonarqube.apple.commons.issues;
 
+import fr.insideapp.sonarqube.apple.commons.InputFileFinder;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -26,15 +27,15 @@ import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.scanner.ScannerSide;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @ScannerSide
 public final class ReportIssueRecorder {
 
-    private static final Logger LOGGER = Loggers.get(ReportIssueRecorder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportIssueRecorder.class);
 
     public void recordIssues(List<ReportIssue> issues, String repository, SensorContext sensorContext) {
 
@@ -61,18 +62,18 @@ public final class ReportIssueRecorder {
             final String filePath = issue.getFilePath();
             // We have a file location associated with the generated issue
             if (filePath != null) {
-                final FilePredicate relativePathPredicate = predicates.hasRelativePath(filePath);
-                final FilePredicate absolutePathPredicate = predicates.hasAbsolutePath(filePath);
-                final FilePredicate pathPredicate = predicates.or(absolutePathPredicate, relativePathPredicate);
-                final FilePredicate filePredicate = predicates.and(pathPredicate, mainPredicate);
-                InputFile inputFile = fs.inputFile(filePredicate);
+                InputFile inputFile = InputFileFinder.find(fs, filePath, mainPredicate);
                 // Making sure the file is part of SonarQube FS
-                if (fs.hasFiles(filePredicate) && inputFile != null) {
+                if (inputFile != null) {
                     // Adding the location of the file
                     sonarIssueLocation.on(inputFile);
                     final Integer lineNumber = issue.getLineNumber();
                     // We have a line number for that file
-                    if (lineNumber != null) {
+                    if (lineNumber != null && (lineNumber < 1 || lineNumber > inputFile.lines())) {
+                        // selectLine throws on an invalid line, which used to abort the whole sensor
+                        LOGGER.warn("Line {} is out of range for {} ({} lines), reporting the issue on the file",
+                                lineNumber, filePath, inputFile.lines());
+                    } else if (lineNumber != null) {
                         // Adding the line number
                         sonarIssueLocation.at(inputFile.selectLine(lineNumber));
                     }

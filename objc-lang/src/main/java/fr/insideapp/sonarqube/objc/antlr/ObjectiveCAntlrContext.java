@@ -39,7 +39,7 @@ public class ObjectiveCAntlrContext extends AntlrContext {
     @Override
     public void loadFromStreams(InputFile inputFile, InputStream file, InputStream linesStream, Charset charset) throws IOException {
         final SourceLinesProvider linesProvider = new SourceLinesProvider();
-        final CharStream charStream = CharStreams.fromStream(file, charset);
+        final CharStream charStream = CharStreams.fromStream(linesProvider.bomInputStream(file), charset); // the line table skips the BOM too
         final ObjectiveCLexer lexer = new ObjectiveCLexer(charStream);
         lexer.removeErrorListeners();
         final CommonTokenStream stream = new CommonTokenStream(lexer);

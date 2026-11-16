@@ -17,22 +17,22 @@
  */
 package fr.insideapp.sonarqube.apple.xcode.coverage.recorder;
 
+import fr.insideapp.sonarqube.apple.commons.InputFileFinder;
 import fr.insideapp.sonarqube.apple.xcode.coverage.models.XcodeCodeCoverage;
 import fr.insideapp.sonarqube.apple.xcode.coverage.models.XcodeCodeCoverageMetadata;
-import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 import org.sonar.api.scanner.ScannerSide;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @ScannerSide
 public final class XcodeCoverageRecorder implements XcodeCoverageRecordable {
 
-    private static final Logger LOGGER = Loggers.get(XcodeCoverageRecorder.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(XcodeCoverageRecorder.class);
 
     private final SensorContext context;
 
@@ -74,13 +74,11 @@ public final class XcodeCoverageRecorder implements XcodeCoverageRecordable {
     }
 
     private InputFile getFile(String filePath) {
-        FilePredicate fp = context.fileSystem().predicates().hasPath(filePath);
-        if(context.fileSystem().hasFiles(fp)) {
-            return context.fileSystem().inputFile(fp);
-        } else {
+        InputFile inputFile = InputFileFinder.find(context.fileSystem(), filePath, context.fileSystem().predicates().all());
+        if (inputFile == null) {
             LOGGER.warn("Can't find file {}", filePath);
-            return null;
         }
+        return inputFile;
     }
 
 }

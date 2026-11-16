@@ -61,6 +61,30 @@ public final class StaticSingleCommandLineToolRunnerTest {
         assertThat(output).isEmpty();
     }
 
+    @Test
+    public void run_unexpected_exit_code() {
+        // prepare
+        runner = makeMock("false");
+        when(runner.arguments()).thenReturn(new String[]{});
+        // test
+        String output = runner.run();
+        // assert
+        assertThat(output).isEmpty();
+    }
+
+    @Test
+    public void run_in_working_directory() throws java.io.IOException {
+        // prepare
+        java.io.File directory = java.nio.file.Files.createTempDirectory("runner").toFile().getCanonicalFile();
+        runner = makeMock("pwd");
+        when(runner.arguments()).thenReturn(new String[]{});
+        when(runner.workingDirectory()).thenReturn(directory);
+        // test
+        String output = runner.run();
+        // assert
+        assertThat(output.strip()).isEqualTo(directory.getPath());
+    }
+
     private StaticSingleCommandLineToolRunner makeMock(String command) {
         return mock(
                 StaticSingleCommandLineToolRunner.class,

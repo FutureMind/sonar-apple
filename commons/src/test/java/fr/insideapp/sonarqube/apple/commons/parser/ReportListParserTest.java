@@ -27,6 +27,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,9 +47,18 @@ public final class ReportListParserTest {
         // prepare
         when(parser.perform(anyString())).thenThrow(ExceptionHelper.build());
         // test
-        List<?> outputs = parser.parse(anyString());
+        List<?> outputs = parser.parse("{\"report\": true}");
         // assert
         assertThat(outputs).isEmpty();
+    }
+
+    @Test
+    public void parse_blank_input() throws Exception {
+        // test: a failed tool run yields empty output, which must not be parsed
+        List<?> outputs = parser.parse("  ");
+        // assert
+        assertThat(outputs).isEmpty();
+        verify(parser, never()).perform(anyString());
     }
 
     @Test
@@ -55,7 +66,7 @@ public final class ReportListParserTest {
         // prepare
         when(parser.perform(anyString())).thenReturn(Arrays.asList("string_parsed"));
         // test
-        List<?> outputs = parser.parse(anyString());
+        List<?> outputs = parser.parse("{\"report\": true}");
         // assert
         assertThat(outputs).hasSize(1);
         assertThat(outputs.get(0)).isEqualTo("string_parsed");

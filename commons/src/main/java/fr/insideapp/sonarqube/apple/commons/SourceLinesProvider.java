@@ -18,8 +18,8 @@
 package fr.insideapp.sonarqube.apple.commons;
 
 import org.apache.commons.io.input.BOMInputStream;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SourceLinesProvider {
-    private static final Logger LOGGER = Loggers.get(SourceLinesProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SourceLinesProvider.class);
 
     public SourceLine[] getLines(final InputStream inputStream, final Charset charset) {
         if (inputStream == null) {
@@ -40,27 +40,38 @@ public class SourceLinesProvider {
 
         try (final BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(bomInputStream(inputStream), charset))) {
+            // positions are counted in code points, like the ANTLR char streams they are matched against
             int totalLines = 1;
             int global = 0;
             int count = 0;
+            final List<Integer> supplementaryColumns = new ArrayList<>();
 
             int currentChar;
             while ((currentChar = bufferedReader.read()) != -1) {
+                if (Character.isHighSurrogate((char) currentChar)) {
+                    // first half of a surrogate pair: the pair is a single code point
+                    supplementaryColumns.add(count);
+                    continue;
+                }
                 global++;
                 count++;
                 if (currentChar == 10) {
-                    sourceLines.add(new SourceLine(totalLines, count, global - count, global));
+                    sourceLines.add(new SourceLine(totalLines, count, global - count, global, toArray(supplementaryColumns)));
                     totalLines++;
                     count = 0;
+                    supplementaryColumns.clear();
                 }
-
             }
-            sourceLines.add(new SourceLine(totalLines, count, global - count, global));
+            sourceLines.add(new SourceLine(totalLines, count, global - count, global, toArray(supplementaryColumns)));
         } catch (final Exception e) {
             LOGGER.warn("Error occurred reading file", e);
         }
 
         return sourceLines.toArray(new SourceLine[0]);
+    }
+
+    private static int[] toArray(final List<Integer> values) {
+        return values.stream().mapToInt(Integer::intValue).toArray();
     }
 
     public BOMInputStream bomInputStream(final InputStream inputStream) throws IOException {

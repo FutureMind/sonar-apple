@@ -20,8 +20,10 @@ package fr.insideapp.sonarqube.apple.commons;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.scanner.ScannerSide;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @ScannerSide
 public class SonarProjectConfiguration {
@@ -30,6 +32,15 @@ public class SonarProjectConfiguration {
 
     public SonarProjectConfiguration(final Configuration configuration) {
         this.configuration = configuration;
+    }
+
+    public static final String PROJECT_BASE_DIR_KEY = "sonar.projectBaseDir";
+
+    /**
+     * @return the project base directory as set by the scanner, if known
+     */
+    public Optional<File> baseDir() {
+        return configuration.get(PROJECT_BASE_DIR_KEY).filter(s -> !s.isBlank()).map(File::new);
     }
 
     public List<String> sources() {

@@ -26,15 +26,15 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.cpd.NewCpdTokens;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Set;
 
 import static java.lang.String.format;
 
 public class HighlighterVisitor implements ParseTreeItemVisitor {
-    private static final Logger LOGGER = Loggers.get(HighlighterVisitor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HighlighterVisitor.class);
 
     private final Set<Integer> commentTypes;
     private final Set<Integer> stringTypes;
@@ -109,7 +109,7 @@ public class HighlighterVisitor implements ParseTreeItemVisitor {
 
         for (final Token token : antlrContext.getTokens()) {
             final int startLine = token.getLine();
-            final int startLineOffset = token.getCharPositionInLine();
+            final int startLineOffset = antlrContext.toCharColumn(startLine, token.getCharPositionInLine());
             final int[] endDetails = antlrContext.getLineAndColumn(token.getStopIndex());
 
             if (endDetails == null
@@ -121,7 +121,7 @@ public class HighlighterVisitor implements ParseTreeItemVisitor {
             }
 
             final int endLine = endDetails[0];
-            final int endLineOffset = endDetails[1] + (token.getText().contains("\n") ? 0 : 1);
+            final int endLineOffset = antlrContext.toCharColumn(endLine, endDetails[1] + (token.getText().contains("\n") ? 0 : 1));
 
             try {
                 final TextRange range = file.newRange(startLine, startLineOffset, endLine, endLineOffset);

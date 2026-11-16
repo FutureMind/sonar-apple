@@ -24,6 +24,7 @@ import fr.insideapp.sonarqube.apple.xcode.runner.XcodeResultReadRunnable;
 import fr.insideapp.sonarqube.apple.xcode.warnings.converter.XcodeWarningConvertible;
 import fr.insideapp.sonarqube.apple.xcode.warnings.mapper.XcodeWarningsMapper;
 import fr.insideapp.sonarqube.apple.xcode.warnings.parser.XcodeWarningParsable;
+import fr.insideapp.sonarqube.apple.xcode.warnings.parser.models.WarningSummary;
 import fr.insideapp.sonarqube.apple.xcode.warnings.splitter.XcodeWarningsReportIssueSplittable;
 import fr.insideapp.sonarqube.objc.ObjectiveC;
 import fr.insideapp.sonarqube.swift.Swift;
@@ -48,7 +49,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 public final class XcodeWarningsSensorTest {
@@ -105,6 +106,17 @@ public final class XcodeWarningsSensorTest {
     }
 
     @Test
+    public void execute_noResultBundle_skips() {
+        // prepare
+        context.settings().setProperty("sonar.apple.resultBundlePath", "does-not-exist.xcresult");
+        // test
+        sensor.execute(context);
+        // assert
+        verify(runner, never()).run(any());
+        assertThat(context.allIssues()).isEmpty();
+    }
+
+    @Test
     public void execute_oneWarning() throws IOException {
         // prepare
         DefaultInputFile testFile = new TestInputFileBuilder("", "file.m")
@@ -121,6 +133,8 @@ public final class XcodeWarningsSensorTest {
         );
         File jsonFile = new File(baseDir, "one_warning.json");
         String jsonFileContent = FileUtils.readFileToString(jsonFile, Charset.defaultCharset());
+        // the runner path needs an existing result bundle; the test resources folder stands in for it
+        context.settings().setProperty("sonar.apple.resultBundlePath", ".");
         when(runner.run(any())).thenReturn(jsonFileContent);
         when(parser.parse(anyString())).thenReturn(List.of());
         when(converter.map(any())).thenReturn(Set.of());
@@ -137,6 +151,61 @@ public final class XcodeWarningsSensorTest {
         assertThat(issue1.primaryLocation().message()).isEqualTo("Immutable value 'x' was never used; consider replacing with '_' or removing it");
         assertThat(issue1.primaryLocation().inputComponent().key()).isEqualTo(":file.m");
         assertThat(issue1.primaryLocation().textRange().start().line()).isEqualTo(12);
+    }
+
+    @Test
+    public void executeWithReportPaths() throws IOException {
+        // prepare — point at the one_warning.json test fixture
+        context.settings().setProperty(
+            XcodeWarningExtensionProvider.REPORT_PATHS_KEY,
+            "one_warning.json"
+        );
+        DefaultInputFile testFile = new TestInputFileBuilder("", "file.m")
+            .setLines(100)
+            .setOriginalLineEndOffsets(new int[100])
+            .setOriginalLineStartOffsets(new int[100])
+            .build();
+        context.fileSystem().add(testFile);
+        ReportIssue issue = new ReportIssue(
+            "no-usage",
+            "Immutable value 'x' was never used; consider replacing with '_' or removing it",
+            testFile.path().toString(),
+            12
+        );
+
+        when(parser.parse(anyString())).thenReturn(List.of(mock(WarningSummary.class)));
+        when(converter.map(any())).thenReturn(Set.of());
+        when(mapper.map(any())).thenReturn(Set.of(issue));
+        when(splitter.split(any(), any())).thenReturn(Map.of(rulesDefinition, List.of(issue)));
+        when(rulesDefinition.getRepositoryKey()).thenReturn("key");
+
+        // test
+        sensor.execute(context);
+
+        // assert — runner should NOT be called
+        verify(runner, never()).run(any());
+        List<Issue> issues = new ArrayList<>(context.allIssues());
+        assertThat(issues).hasSize(1);
+        assertThat(issues.get(0).ruleKey().rule()).isEqualTo("no-usage");
+    }
+
+    @Test
+    public void executeWithReportPaths_fileNotFound() {
+        // prepare — point at a non-existent file
+        context.settings().setProperty(
+            XcodeWarningExtensionProvider.REPORT_PATHS_KEY,
+            "does-not-exist.json"
+        );
+        when(converter.map(any())).thenReturn(Set.of());
+        when(mapper.map(any())).thenReturn(Set.of());
+        when(splitter.split(any(), any())).thenReturn(Map.of());
+
+        // test — should not crash
+        sensor.execute(context);
+
+        // assert
+        verify(runner, never()).run(any());
+        assertThat(context.allIssues()).isEmpty();
     }
 
 }

@@ -21,15 +21,15 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 
 public class ParseTreeAnalyzer {
 
-    private static final Logger LOGGER = Loggers.get(ParseTreeAnalyzer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ParseTreeAnalyzer.class);
 
     private final String languageKey;
     private final Type type;
@@ -57,7 +57,8 @@ public class ParseTreeAnalyzer {
                 antlrContext.loadFromFile(inf, charset);
                 ParseTreeItemVisitor visitor = new CustomTreeVisitor(visitors);
                 visitor.fillContext(sensorContext, antlrContext);
-            } catch (IOException e) {
+            } catch (IOException | RuntimeException e) {
+                // one unparsable file must not fail the whole analysis
                 LOGGER.warn("Unexpected error while analyzing file " + inf.filename(), e);
             }
 

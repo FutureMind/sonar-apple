@@ -21,7 +21,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.config.Configuration;
 
+import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -70,6 +72,18 @@ public final class SonarProjectConfigurationTest {
         assertThat(sources).hasSize(2);
         assertThat(sources.get(0)).isEqualTo("source1");
         assertThat(sources.get(1)).isEqualTo("source2");
+    }
+
+    @Test
+    public void baseDir_specified() {
+        when(configuration.get("sonar.projectBaseDir")).thenReturn(Optional.of("/projects/app"));
+        assertThat(projectConfiguration.baseDir()).contains(new File("/projects/app"));
+    }
+
+    @Test
+    public void baseDir_not_specified() {
+        when(configuration.get("sonar.projectBaseDir")).thenReturn(Optional.empty());
+        assertThat(projectConfiguration.baseDir()).isEmpty();
     }
 
 }
