@@ -26,24 +26,18 @@ import fr.insideapp.sonarqube.apple.xcode.coverage.recorder.XcodeCoverageRecorda
 import fr.insideapp.sonarqube.apple.xcode.coverage.runner.XcodeCoverageReadRunnable;
 import fr.insideapp.sonarqube.objc.ObjectiveC;
 import fr.insideapp.sonarqube.swift.Swift;
+import fr.insideapp.sonarqube.apple.commons.report.ReportFiles;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 public class XcodeCoverageSensor implements Sensor {
-
-    private static final Logger LOGGER = Loggers.get(XcodeCoverageSensor.class);
 
     private final Swift swift;
     private final ObjectiveC objectiveC;
@@ -80,7 +74,7 @@ public class XcodeCoverageSensor implements Sensor {
                 .name("Xcode Coverage")
                 .onlyOnLanguages(swift.getKey(), objectiveC.getKey())
                 .onlyWhenConfiguration(config ->
-                        config.get(XcodeCoverageExtensionProvider.REPORT_PATHS_KEY).isPresent()
+                        ReportFiles.configured(config, XcodeCoverageExtensionProvider.REPORT_PATHS_KEY)
                         || extensionProvider.resultBundle(fileSystem, config).exists()
                 )
                 .onlyOnFileType(InputFile.Type.MAIN);
@@ -89,11 +83,10 @@ public class XcodeCoverageSensor implements Sensor {
     @Override
     public void execute(SensorContext sensorContext) {
         Configuration config = sensorContext.config();
-        Optional<String> reportPaths = config.get(XcodeCoverageExtensionProvider.REPORT_PATHS_KEY);
 
         final Map<String, List<XcodeCodeCoverageMetadata>> coverageData;
-        if (reportPaths.isPresent()) {
-            coverageData = readReportFiles(reportPaths.get(), sensorContext);
+        if (ReportFiles.configured(config, XcodeCoverageExtensionProvider.REPORT_PATHS_KEY)) {
+            coverageData = readCoverageReports(sensorContext);
         } else {
             final File resultBundle = extensionProvider.resultBundle(sensorContext.fileSystem(), sensorContext.config());
             final String xcodeCoverageReadOutput = runner.run(resultBundle);
@@ -104,24 +97,10 @@ public class XcodeCoverageSensor implements Sensor {
         recorder.save(codeCoverageData);
     }
 
-    private Map<String, List<XcodeCodeCoverageMetadata>> readReportFiles(String paths, SensorContext sensorContext) {
+    private Map<String, List<XcodeCodeCoverageMetadata>> readCoverageReports(SensorContext sensorContext) {
         Map<String, List<XcodeCodeCoverageMetadata>> merged = new HashMap<>();
-        Path baseDir = sensorContext.fileSystem().baseDir().toPath();
-        for (String path : paths.split(",")) {
-            Path resolved = baseDir.resolve(path.trim());
-            if (Files.exists(resolved)) {
-                try {
-                    String content = Files.readString(resolved);
-                    Map<String, List<XcodeCodeCoverageMetadata>> parsed = parser.parse(content);
-                    merged.putAll(parsed);
-                    LOGGER.info("Read Xcode coverage report: {}", resolved);
-                } catch (IOException e) {
-                    LOGGER.error("Failed to read Xcode coverage report: {}", resolved);
-                    LOGGER.debug("{}", e);
-                }
-            } else {
-                LOGGER.warn("Xcode coverage report not found: {}", resolved);
-            }
+        for (String content : ReportFiles.read(sensorContext, XcodeCoverageExtensionProvider.REPORT_PATHS_KEY, "Xcode coverage")) {
+            merged.putAll(parser.parse(content));
         }
         return merged;
     }

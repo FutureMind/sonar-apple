@@ -24,25 +24,17 @@ import fr.insideapp.sonarqube.swift.issues.swiftlint.mapper.SwiftLintReportMappa
 import fr.insideapp.sonarqube.swift.issues.swiftlint.models.SwiftLintIssue;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.parser.SwiftLintReportParsable;
 import fr.insideapp.sonarqube.swift.issues.swiftlint.runner.SwiftLintRunnable;
+import fr.insideapp.sonarqube.apple.commons.report.ReportFiles;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class SwiftLintSensor implements Sensor {
-
-    private static final Logger LOGGER = Loggers.get(SwiftLintSensor.class);
 
     private final Swift swift;
     private final SwiftLintRulesDefinition rulesDefinition;
@@ -76,11 +68,10 @@ public class SwiftLintSensor implements Sensor {
     @Override
     public void execute(SensorContext sensorContext) {
         Configuration config = sensorContext.config();
-        Optional<String> reportPaths = config.get(SwiftLintExtensionProvider.REPORT_PATHS_KEY);
 
         List<String> outputs;
-        if (reportPaths.isPresent()) {
-            outputs = readReportFiles(reportPaths.get(), sensorContext);
+        if (ReportFiles.configured(config, SwiftLintExtensionProvider.REPORT_PATHS_KEY)) {
+            outputs = ReportFiles.read(sensorContext, SwiftLintExtensionProvider.REPORT_PATHS_KEY, "SwiftLint");
         } else {
             outputs = runner.run();
         }
@@ -92,26 +83,6 @@ public class SwiftLintSensor implements Sensor {
         List<ReportIssue> reportIssues = mapper.map(issues).stream().toList();
         ReportIssueRecorder issueRecorder = new ReportIssueRecorder();
         issueRecorder.recordIssues(reportIssues, rulesDefinition.getRepositoryKey(), sensorContext);
-    }
-
-    private List<String> readReportFiles(String paths, SensorContext sensorContext) {
-        List<String> outputs = new ArrayList<>();
-        Path baseDir = sensorContext.fileSystem().baseDir().toPath();
-        for (String path : paths.split(",")) {
-            Path resolved = baseDir.resolve(path.trim());
-            if (Files.exists(resolved)) {
-                try {
-                    outputs.add(Files.readString(resolved));
-                    LOGGER.info("Read SwiftLint report: {}", resolved);
-                } catch (IOException e) {
-                    LOGGER.error("Failed to read SwiftLint report: {}", resolved);
-                    LOGGER.debug("{}", e);
-                }
-            } else {
-                LOGGER.warn("SwiftLint report not found: {}", resolved);
-            }
-        }
-        return outputs;
     }
 
 }

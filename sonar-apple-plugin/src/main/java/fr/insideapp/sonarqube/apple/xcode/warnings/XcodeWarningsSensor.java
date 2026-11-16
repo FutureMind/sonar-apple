@@ -30,25 +30,18 @@ import fr.insideapp.sonarqube.apple.xcode.warnings.parser.models.WarningSummary;
 import fr.insideapp.sonarqube.apple.xcode.warnings.splitter.XcodeWarningsReportIssueSplittable;
 import fr.insideapp.sonarqube.objc.ObjectiveC;
 import fr.insideapp.sonarqube.swift.Swift;
+import fr.insideapp.sonarqube.apple.commons.report.ReportFiles;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public class XcodeWarningsSensor implements Sensor {
-
-    private static final Logger LOGGER = Loggers.get(XcodeWarningsSensor.class);
 
     private final Swift swift;
     private final ObjectiveC objectiveC;
@@ -89,11 +82,13 @@ public class XcodeWarningsSensor implements Sensor {
     @Override
     public void execute(SensorContext sensorContext) {
         Configuration config = sensorContext.config();
-        Optional<String> reportPaths = config.get(XcodeWarningExtensionProvider.REPORT_PATHS_KEY);
 
         final List<WarningSummary> warningSummaries;
-        if (reportPaths.isPresent()) {
-            warningSummaries = readReportFiles(reportPaths.get(), sensorContext);
+        if (ReportFiles.configured(config, XcodeWarningExtensionProvider.REPORT_PATHS_KEY)) {
+            warningSummaries = ReportFiles.read(sensorContext, XcodeWarningExtensionProvider.REPORT_PATHS_KEY, "Xcode warnings").stream()
+                    .map(parser::parse)
+                    .flatMap(List::stream)
+                    .toList();
         } else {
             final File resultBundle = extensionProvider.resultBundle(sensorContext.fileSystem(), config);
             final String xcodeResultReadOutput = runner.run(resultBundle);
@@ -107,24 +102,4 @@ public class XcodeWarningsSensor implements Sensor {
         splitReportIssues.forEach((rulesDefinition, splitIssues) -> issueRecorder.recordIssues(splitIssues, rulesDefinition.getRepositoryKey(), sensorContext));
     }
 
-    private List<WarningSummary> readReportFiles(String paths, SensorContext sensorContext) {
-        List<WarningSummary> allSummaries = new ArrayList<>();
-        Path baseDir = sensorContext.fileSystem().baseDir().toPath();
-        for (String path : paths.split(",")) {
-            Path resolved = baseDir.resolve(path.trim());
-            if (Files.exists(resolved)) {
-                try {
-                    String content = Files.readString(resolved);
-                    allSummaries.addAll(parser.parse(content));
-                    LOGGER.info("Read Xcode Warnings report: {}", resolved);
-                } catch (IOException e) {
-                    LOGGER.error("Failed to read Xcode Warnings report: {}", resolved);
-                    LOGGER.debug("{}", e);
-                }
-            } else {
-                LOGGER.warn("Xcode Warnings report not found: {}", resolved);
-            }
-        }
-        return allSummaries;
-    }
 }
