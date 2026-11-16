@@ -1,12 +1,9 @@
+![CI](https://github.com/FutureMind/sonar-apple/actions/workflows/ci.yml/badge.svg)
 
-![CI](https://github.com/insideapp-fr/sonar-flutter/workflows/CI/badge.svg)
-
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=insideapp-oss_sonar-apple&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=insideapp-oss_sonar-apple)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=insideapp-oss_sonar-apple&metric=coverage)](https://sonarcloud.io/summary/new_code?id=insideapp-oss_sonar-apple)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=insideapp-oss_sonar-apple&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=insideapp-oss_sonar-apple)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=insideapp-oss_sonar-apple&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=insideapp-oss_sonar-apple)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=insideapp-oss_sonar-apple&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=insideapp-oss_sonar-apple)
-
+> **Future Mind fork** of [insideapp-fr/sonar-apple](https://github.com/insideapp-fr/sonar-apple)
+> (LGPL-3.0). It targets current SonarQube releases and merges fixes from other
+> forks and open upstream PRs. See [CHANGELOG.md](CHANGELOG.md) for what differs
+> from upstream 0.5.1.
 
 # SonarQube plugin for Swift / Objective-C
 
@@ -16,7 +13,8 @@ Let us know if you want to get involved.
 
 ## Features
 
-The plugin is designed to support Swift 5 syntax.
+The plugin is designed to support Swift 5 syntax. Swift 6 code is analysed too: highlighting, size and
+duplication work, but complexity can be off for newer syntax (typed throws, `~Copyable`, macros...).
 
 | Feature             | Tool(s)           | Availability       |
 |---------------------|-------------------|--------------------|
@@ -33,7 +31,9 @@ The plugin is designed to support Swift 5 syntax.
 
 ### Server-side
 
-SonarQube Community Build 26.8+ running on Java 21 is required.
+SonarQube Community Build 26.6+ (or another edition with plugin API 13.7+) is required.
+The scanner needs Java 17+. Scanners only download the plugin for projects that contain
+Swift or Objective-C files.
 
 - Download the plugin binary into the ``$SONARQUBE_HOME/extensions/plugins`` directory.
 - Restart the server.
@@ -88,6 +88,9 @@ sonar.apple.periphery.projectPath=MyApp.xcworkspace
 # One or more comma-separated Xcode schemes included in the Index Store.
 sonar.apple.periphery.schemes=MyApp
 
+# Set to true to disable the Periphery sensor (e.g. Periphery is not installed on the runner).
+#sonar.apple.periphery.skip=true
+
 ## OCLint ##
 
 # Path to the JSON Compilation Database folder
@@ -129,6 +132,28 @@ sonar-scanner
 ```
 
 ### Advanced configuration
+
+#### Importing pre-generated reports
+
+By default the plugin runs each tool itself during the analysis. If your pipeline already ran a
+tool, point the plugin at its JSON output instead (comma-separated paths, relative to the project
+base directory). The tool is then not run again.
+
+| Property                             | Expected content                                              |
+|--------------------------------------|---------------------------------------------------------------|
+| `sonar.apple.swiftLint.reportPaths`  | `swiftlint lint --reporter json`                              |
+| `sonar.apple.periphery.reportPaths`  | `periphery scan --format json`                                |
+| `sonar.apple.mobsfscan.reportPaths`  | `mobsfscan --json <sources>`                                  |
+| `sonar.apple.coverage.reportPaths`   | `xcrun xccov view --archive --json <bundle>.xcresult`         |
+| `sonar.apple.warnings.reportPaths`   | `xcrun xcresulttool get --legacy --format json --path <bundle>.xcresult` |
+
+Missing report files are logged and skipped, they do not fail the analysis.
+
+#### Troubleshooting
+
+When a tool cannot run, the analysis log says why, e.g. `Could not start 'periphery'. Is it
+installed and on the PATH of the scanner?`, a timeout, or the tool's exit code and stderr.
+Run the scanner with `-X` for stack traces.
 
 #### Periphery
 
