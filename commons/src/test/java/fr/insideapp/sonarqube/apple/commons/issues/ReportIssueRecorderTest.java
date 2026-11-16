@@ -76,6 +76,34 @@ public class ReportIssueRecorderTest {
     }
 
     @Test
+    public void record_issue_on_line_out_of_range() {
+        // prepare
+        DefaultInputFile testFile = new TestInputFileBuilder("", TEST_FILENAME)
+                .setLanguage("swift")
+                .setLines(10)
+                .setOriginalLineEndOffsets(new int[10])
+                .setOriginalLineStartOffsets(new int[10])
+                .setModuleBaseDir(Paths.get(TEST_ROOT))
+                .build();
+        context.fileSystem().add(testFile);
+        List<ReportIssue> reportIssues = List.of(
+                new ReportIssue("ruleId", "message", testFile.path().toString(), 11),
+                new ReportIssue("ruleId", "message", testFile.path().toString(), 0)
+        );
+
+        // test
+        recorder.recordIssues(reportIssues, "TestRepo", context);
+
+        // assert: issues kept on the file instead of failing the sensor
+        final List<Issue> issues = new ArrayList<>(context.allIssues());
+        assertThat(issues).hasSize(2);
+        assertThat(issues).allSatisfy(issue -> {
+            assertThat(issue.primaryLocation().inputComponent().key()).isEqualTo(testFile.key());
+            assertThat(issue.primaryLocation().textRange()).isNull();
+        });
+    }
+
+    @Test
     public void record_issue_on_file_without_message() {
         // prepare
         DefaultInputFile testFile = new TestInputFileBuilder("", TEST_FILENAME)

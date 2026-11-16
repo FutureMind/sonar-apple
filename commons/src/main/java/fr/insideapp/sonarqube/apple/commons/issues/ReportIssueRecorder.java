@@ -72,7 +72,11 @@ public final class ReportIssueRecorder {
                     sonarIssueLocation.on(inputFile);
                     final Integer lineNumber = issue.getLineNumber();
                     // We have a line number for that file
-                    if (lineNumber != null) {
+                    if (lineNumber != null && (lineNumber < 1 || lineNumber > inputFile.lines())) {
+                        // selectLine throws on an invalid line, which used to abort the whole sensor
+                        LOGGER.warn("Line {} is out of range for {} ({} lines), reporting the issue on the file",
+                                lineNumber, filePath, inputFile.lines());
+                    } else if (lineNumber != null) {
                         // Adding the line number
                         sonarIssueLocation.at(inputFile.selectLine(lineNumber));
                     }
