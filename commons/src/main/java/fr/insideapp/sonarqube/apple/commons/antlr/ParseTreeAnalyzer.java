@@ -57,7 +57,8 @@ public class ParseTreeAnalyzer {
                 antlrContext.loadFromFile(inf, charset);
                 ParseTreeItemVisitor visitor = new CustomTreeVisitor(visitors);
                 visitor.fillContext(sensorContext, antlrContext);
-            } catch (IOException e) {
+            } catch (IOException | RuntimeException e) {
+                // one unparsable file must not fail the whole analysis
                 LOGGER.warn("Unexpected error while analyzing file " + inf.filename(), e);
             }
 
